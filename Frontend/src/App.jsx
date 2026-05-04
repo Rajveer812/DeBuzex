@@ -1,21 +1,34 @@
 import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
+import Navbar from './components/Navbar'
+import Sidebar from './components/Sidebar'
+import PostArea from './pages/PostArea'
 
 function App() {
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="bg-[#0d0f14] min-h-screen text-[#f0f2f8] font-sans">
+    <div className="bg-[#0d0f14] min-h-screen text-[#f0f2f8] font-sans overflow-x-hidden">
       
-      {/* We will place the <Navbar /> here soon so it shows on every page */}
+      <Navbar/>
+     {/* Main Layout Wrapper */}
+      <div className="flex pt-[10px]">
+        
+        {/* Sidebar */}
+        <Sidebar/>
 
-      <main className="pt-[58px]"> {/* Padding top to account for your fixed navbar height */}
-        <Routes>
-          {/* We will add your actual routes here as we build the pages */}
-          <Route path="/" element={<div className="p-8 text-center text-accent">DebugDash Foundation Ready...</div>} />
-        </Routes>
-      </main>
+        {/* Main Content Area: Notice how the margin-left changes dynamically based on the state! */}
+        <main className="flex-1 p-6 ml-[250px]">
+          <Routes>
+            <Route path="/" element={
+              <div className="">
+                <PostArea/>
+              </div>
+            } />
+          </Routes>
+        </main>
+      </div>
     </div>
   )
 }
