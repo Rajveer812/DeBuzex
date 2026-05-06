@@ -1,5 +1,6 @@
 import React from 'react';
 import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings,CircleX,PanelRight} from 'lucide-react'
+import MyProfile from '../MyProfile/MyProfile';
 const Sidebar = () => {
   return (
     <aside 
@@ -25,9 +26,9 @@ const Sidebar = () => {
         Account
       </div>
       <nav className="flex flex-col gap-1 border-b border-white/10">
-        <NavItem icon={<UserCog />} label="My Profile"/>
-        <NavItem icon={<Settings/>} label="Settings"  />
-        <NavItem icon={<Compass />} label="About us"  isGreenBadge={true} />
+        <NavItem icon={<UserCog />} label="My Profile" path="/myProfile" />
+        <NavItem icon={<Settings/>} label="Settings"  path="/setting"/>
+        <NavItem icon={<Compass />} label="About us"  isGreenBadge={true}path="/aboutUs" />
       </nav>
 
       {/* User Card at the bottom */}
@@ -49,9 +50,9 @@ const Sidebar = () => {
 };
 
 // --- Helper Component for the Links ---
-const NavItem = ({ icon, label, isActive, badge, isGreenBadge }) => {
+const NavItem = ({ icon, label, isActive, badge, isGreenBadge,path }) => {
   return (
-    <a href="#" className={`flex items-center p-2.5 rounded-lg cursor-pointer transition-all duration-200 overflow-hidden ${
+    <a href={path} className={`flex items-center p-2.5 rounded-lg cursor-pointer transition-all duration-200 overflow-hidden ${
       isActive 
         ? 'bg-[#6ee7b7]/10 text-[#6ee7b7] border border-[#6ee7b7]/20' 
         : 'text-[#8b92a8] hover:bg-[#1e2330] hover:text-white'

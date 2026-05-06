@@ -4,9 +4,9 @@ import './App.css'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import PostArea from './pages/PostArea'
+import MyProfile from './MyProfile/MyProfile'
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <div className="bg-[#0d0f14] min-h-screen text-[#f0f2f8] font-sans overflow-x-hidden">
@@ -17,15 +17,11 @@ function App() {
         
         {/* Sidebar */}
         <Sidebar/>
-
         {/* Main Content Area: Notice how the margin-left changes dynamically based on the state! */}
         <main className="flex-1 p-6 ml-[250px]">
           <Routes>
-            <Route path="/" element={
-              <div className="">
-                <PostArea/>
-              </div>
-            } />
+            <Route path="/" element={<div className=""><PostArea/></div> } />
+            <Route path="/myProfile" element={<MyProfile />} />
           </Routes>
         </main>
       </div>
