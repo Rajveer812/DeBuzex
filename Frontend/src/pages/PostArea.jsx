@@ -1,5 +1,5 @@
 import React from "react";
-import RightSidebar from "../components/RightSidebar";
+import RightSidebar from "../components/RightSidebar/RightSidebar";
 import CreatePost from "../components/CreatePost";
 
 function PostArea() {

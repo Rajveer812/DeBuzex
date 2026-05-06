@@ -18,7 +18,7 @@ function App() {
         {/* Sidebar */}
         <Sidebar/>
         {/* Main Content Area: Notice how the margin-left changes dynamically based on the state! */}
-        <main className="flex-1 p-6 ml-[250px]">
+        <main className="flex-1 px-6 ml-[250px]">
           <Routes>
             <Route path="/" element={<div className=""><PostArea/></div> } />
             <Route path="/myProfile" element={<MyProfile />} />

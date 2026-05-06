@@ -7,7 +7,7 @@ const Sidebar = () => {
       // 1. 'group' tracks the hover state for all child elements.
       // 2. Base width is 68px, hover width scales up to 220px.
       // 3. z-50 ensures it floats on top of your main feed when open.
-      className="group fixed left-0 top-[80px] h-[calc(100vh-58px)] bg-[#0d0f14]/95 backdrop-blur-md border-r border-white/10 transition-all duration-300 ease-in-out z-50 flex flex-col w-[68px] hover:w-[250px] px-2 hover:px-3 overflow-hidden"
+      className="group fixed left-0 top-[95px] h-[calc(100vh-58px)] bg-[#0d0f14]/95 backdrop-blur-md border-r border-white/10 transition-all duration-300 ease-in-out z-50 flex flex-col w-[68px] hover:w-[250px] px-2 hover:px-3 overflow-hidden"
     >
       {/* Menu Header - Fades and slides in on hover */}
       <div className="text-[10px] font-bold tracking-widest text-[#555d72] uppercase mb-2 mt-6 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:px-2">
