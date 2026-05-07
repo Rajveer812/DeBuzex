@@ -1,23 +1,70 @@
-import React from "react";
+import React, { useContext } from "react";
 import img from "../assets/img.png";
-import {Search} from 'lucide-react'
+import { Search } from 'lucide-react';
+
+// 1. Import the Context we created earlier
+import { AuthContext } from '../context/AuthContext';
+
 function Navbar() {
+  // 2. Grab the user data and functions from the Loudspeaker
+  const { user, setIsModalOpen, logout } = useContext(AuthContext);
+
   return (
     <nav className="">
       <div className="flex justify-between pt-[15px] px-4 pb-2 shadow-purple-600 border-white/10 border-b">
+        
+        {/* Logo Section */}
         <div>
-          <a>
-            <img src={img} className="w-40 "></img>
+          <a href="#">
+            <img src={img} className="w-40" alt="Logo" />
           </a>
         </div>
+        
+        {/* Search Section */}
         <div className="">
-          <form>
-            <input className="bg-[#0E1F3D] rounded-full py-2 px-10 w-130 inset-ring-blue-300 inset-ring-1 " placeholder="Search"></input>
-            <button className=" border border-white/10 py-2 px-2 rounded-full ml-2" type="submit"> <Search size={16} color="#223b5d" strokeWidth={3} /></button>
+          <form className="flex items-center">
+            <input 
+              className="bg-[#0E1F3D] rounded-full py-2 px-10 w-130 inset-ring-blue-300 inset-ring-1 text-white" 
+              placeholder="Search" 
+            />
+            <button className="border border-white/10 py-2 px-2 rounded-full ml-2" type="submit"> 
+              <Search size={16} color="#223b5d" strokeWidth={3} />
+            </button>
           </form>
         </div>
-        <div className="items-center  object-top-right">
-          <a><button className=" inset-ring-blue-500 inset-ring-2 rounded-full py-2 px-10">Login</button></a>
+        
+        {/* Auth Section (The Magic Happens Here) */}
+        <div className="flex items-center object-top-right">
+          
+          {user ? (
+            // IF LOGGED IN: Show greeting, Avatar, and Logout button
+            <div className="flex items-center gap-4">
+              <span className="text-[#8b92a8] font-medium hidden md:block">
+                Hi, {user.username}
+              </span>
+              
+              {/* Cool Avatar Circle using the first letter of their username */}
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-lg">
+                {user.username.charAt(0).toUpperCase()}
+              </div>
+
+              <button 
+                onClick={logout}
+                className="inset-ring-red-500 text-red-400 inset-ring-2 rounded-full py-2 px-6 hover:bg-red-500/10 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            // IF NOT LOGGED IN: Show the original Login button
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="inset-ring-blue-500 text-white inset-ring-2 rounded-full py-2 px-10 hover:bg-blue-500/10 transition-colors"
+            >
+              Login
+            </button>
+          )}
+
         </div>
       </div>
     </nav>
