@@ -25,12 +25,14 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true }); 
 
-userSchema.pre('save',async function(next){
-  if(!this.isModified('password')) return next();
-  const salt=await bcrypt.genSalt(10);
-  this.password=await  bcrypt.hash(this.password,salt);
-  next();
-})
+userSchema.pre('save', async function() {
+  // If password isn't modified, just return (exit the function)
+  if (!this.isModified('password')) return;
+  
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+module.exports = {
+    userSchema
+};
