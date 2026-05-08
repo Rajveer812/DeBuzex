@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import PostArea from './pages/PostArea'
 import MyProfile from './MyProfile/MyProfile'
+import EditProfile from './MyProfile/EditProfile'
 
 // CHANGE 1: Import your new AuthModal component
 import AuthModal from './components/Auth/AuthModal' 
@@ -29,6 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<div className=""><PostArea/></div> } />
             <Route path="/myProfile" element={<MyProfile />} />
+            <Route path='/editProfile' element={<EditProfile/>}/>
           </Routes>
         </main>
       </div>

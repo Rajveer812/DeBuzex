@@ -28,8 +28,10 @@ const updateUserProfile = async (req, res) => {
     if (user) {
       // If the frontend sent a new name/bio, update it. If not, keep the old one.
       user.name = req.body.name || user.name;
+      user.username = req.body.username || user.username;
       user.bio = req.body.bio || user.bio;
       user.profilePic = req.body.profilePic || user.profilePic;
+      
 
       if (req.body.password) {
         user.password = req.body.password;
