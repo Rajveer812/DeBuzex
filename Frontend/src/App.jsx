@@ -11,7 +11,7 @@ import AuthModal from './components/Auth/AuthModal'
 
 function App() {
   return (
-    <div className="bg-[#0d0f14] min-h-screen text-[#f0f2f8] font-sans overflow-x-hidden">
+    <div className="bg-[#050c1a] min-h-screen text-[#f0f2f8] font-sans overflow-x-hidden">
       
       <Navbar/>
 

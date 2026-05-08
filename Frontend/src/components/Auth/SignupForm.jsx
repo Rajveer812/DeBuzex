@@ -5,7 +5,7 @@ import { AuthContext } from '../../context/AuthContext';
 const SignupForm = () => {
   const { login } = useContext(AuthContext);
   const [error, setError] = useState('');
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  const [formData, setFormData] = useState({name:'', username: '', email: '', password: '' });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,6 +27,12 @@ const SignupForm = () => {
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {error && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg text-center">{error}</div>}
       
+      <input 
+        type="text" name="name" placeholder="Name" required
+        onChange={handleChange}
+        className="bg-[#0d0f14] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-[#6ee7b7]/50"
+      />
+
       <input 
         type="text" name="username" placeholder="Username" required
         onChange={handleChange}

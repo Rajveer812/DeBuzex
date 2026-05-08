@@ -11,10 +11,10 @@ const generateToken=(id)=>{
 const registerUser=async(req,res)=>{
     try{
         // 1. Grab the data the user typed in (from Postman/React)
-        const{username,email,password}=req.body;
+        const{name,username,email,password}=req.body;
 
         // 2. Validation: Make sure they didn't leave fields blank
-        if (!username || !email || !password) {
+        if (!name ||!username || !email || !password) {
             return res.status(400).json({ message: "Please fill in all fields" });
         }
 
@@ -26,9 +26,10 @@ const registerUser=async(req,res)=>{
         
         // 4. Create and save the new user
         const newUser = await userModel.create({
-        username,
-        email,
-        password
+            name,
+            username,
+            email,
+            password
         });
 
         // 5. Send a success response back to the frontend
@@ -36,8 +37,10 @@ const registerUser=async(req,res)=>{
             message: "User registered successfully!",
             user: {
                 _id: newUser._id,
+                name: newUser.name,        // Great job adding this!
                 username: newUser.username,
                 email: newUser.email,
+                bio: newUser.bio,          // <-- ADDED BIO HERE
                 profilePic: newUser.profilePic,
                 token: generateToken(newUser._id)
             }
@@ -49,7 +52,6 @@ const registerUser=async(req,res)=>{
     }
 };
 
-
 const loginUser=async(req,res)=>{
     try{
         const {email,password}=req.body;
@@ -60,14 +62,17 @@ const loginUser=async(req,res)=>{
                 message: "Login successful!",
                 user: {
                 _id: user._id,
+                name: user.name,           // <-- ADDED NAME HERE
                 username: user.username,
                 email: user.email,
+                bio: user.bio,             // <-- ADDED BIO HERE
                 profilePic: user.profilePic,
                 token: generateToken(user._id) // Give them a wristband
                 }
             });
         }else{
-            res.status(401).json({message:"Inavlid email or password"})
+            // Fixed a small typo here ("Inavlid" -> "Invalid")
+            res.status(401).json({message:"Invalid email or password"}) 
         }
     }
     catch(error){
