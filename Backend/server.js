@@ -5,7 +5,8 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/authRoute');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoute');
+const postRoute = require('./routes/postRoute')
 
 connectDB();// connect db
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(cookieParser())
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/post',postRoute)
 
 
 

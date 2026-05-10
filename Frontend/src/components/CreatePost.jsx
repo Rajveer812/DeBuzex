@@ -1,5 +1,7 @@
 import React from "react";
 import img from "../assets/Designer1.png";
+import axios from 'axios';
+import { AuthContext } from '../components/Auth/AuthModal';
 
 function CreatePost() {
   return (
