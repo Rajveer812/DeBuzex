@@ -48,8 +48,8 @@ function UserName() {
 
             <div className='col-span-8 wrap-break-word'>
                 <p className=' font-outfit font-[700] text-3xl'>{profileData.name || profileData.username}</p>
-                <p className='font-outfit text-sm text-blue-600 dark:text-sky-400'>@{profileData.username}</p>
-                <p className='text-sm text-blue-600 dark:text-sky-400/50'>{profileData.bio ? profileData.bio : "This user hasn't written a bio yet."}</p>
+                <p className=' text-[12px] font-outfit text-sm text-blue-600 dark:text-sky-400'>@{profileData.username}</p>
+                <p className='text-sm text-[#5d80a5] dark:text-sky-400/50'>{profileData.bio ? profileData.bio : "This user hasn't written a bio yet."}</p>
             </div>
         </div> 
 
