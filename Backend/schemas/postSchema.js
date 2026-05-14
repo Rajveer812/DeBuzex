@@ -27,6 +27,11 @@ const postSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'user'
     }],
+    solutions: [{
+        text: { type: String, required: true },
+        author: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+        createdAt: { type: Date, default: Date.now }
+    }],
     createdAt:{
         type:Date,
         default:Date.now

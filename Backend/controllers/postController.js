@@ -34,4 +34,58 @@ const getAllPosts=async(req,res)=>{
     }
 }
 
-module.exports={createPost,getAllPosts}
+const likePost = async (req, res) => {
+    try {
+        const post = await postModel.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        // Check if user already liked the post
+        const userId = req.user._id;
+        const index = post.likes.indexOf(userId);
+
+        if (index === -1) {
+            // Like the post
+            post.likes.push(userId);
+        } else {
+            // Unlike the post
+            post.likes.splice(index, 1);
+        }
+
+        await post.save();
+        res.status(200).json({ message: "Post like status updated", likes: post.likes });
+    } catch (error) {
+        console.log("Error liking post:", error);
+        res.status(500).json({ message: "Server error liking post" });
+    }
+};
+
+const addSolution = async (req, res) => {
+    try {
+        const { text } = req.body;
+        if (!text) {
+            return res.status(400).json({ message: "Solution text is required" });
+        }
+
+        const post = await postModel.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        const newSolution = {
+            text,
+            author: req.user._id
+        };
+
+        post.solutions.push(newSolution);
+        await post.save();
+
+        res.status(201).json({ message: "Solution added successfully", solutions: post.solutions });
+    } catch (error) {
+        console.log("Error adding solution:", error);
+        res.status(500).json({ message: "Server error adding solution" });
+    }
+};
+
+module.exports = { createPost, getAllPosts, likePost, addSolution };
