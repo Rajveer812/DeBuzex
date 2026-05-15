@@ -7,6 +7,8 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoute');
 const userRoutes = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute')
+const chatRoute = require('./routes/chatRoute')
+const messageRoute= require('./routes/messageRoute')
 
 connectDB();// connect db
 const app = express();
@@ -18,6 +20,8 @@ app.use(cookieParser())
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/post',postRoute)
+app.use('/api/chat',chatRoute)
+app.use('/api/message',messageRoute)
 
 
 
