@@ -24,7 +24,6 @@ app.use('/api/chat',chatRoute)
 app.use('/api/message',messageRoute)
 
 
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
