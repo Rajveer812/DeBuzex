@@ -13,7 +13,7 @@ const createPost=async (req,res)=>{
             platform,
             author: req.user._id
         });
-        res.status(201).json('newPost')
+        res.status(201).json(newPost)
     }
     catch(error){
         console.log("Error creating Post",error);

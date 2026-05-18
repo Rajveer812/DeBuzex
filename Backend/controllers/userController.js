@@ -1,7 +1,7 @@
 const { userModel } = require('../models/userModel');
+const asyncHandler = require('express-async-handler');
 
-const getUserProfile = async (req, res) => {
-  try {
+const getUserProfile = asyncHandler(async (req, res) => {
     const user = await userModel.findById(req.user._id);
     if (user) {
       res.json({
@@ -16,15 +16,10 @@ const getUserProfile = async (req, res) => {
     } else {
       res.status(404).json({ message: 'User not found' });
     }
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error fetching profile' });
-  }
-};
+});
 
-const updateUserProfile = async (req, res) => {
-  try {
+const updateUserProfile =asyncHandler( async (req, res) => {
     const user = await userModel.findById(req.user._id);
-
     if (user) {
       // If the frontend sent a new name/bio, update it. If not, keep the old one.
       user.name = req.body.name || user.name;
@@ -32,7 +27,6 @@ const updateUserProfile = async (req, res) => {
       user.bio = req.body.bio || user.bio;
       user.profilePic = req.body.profilePic || user.profilePic;
       
-
       if (req.body.password) {
         user.password = req.body.password;
       }
@@ -51,9 +45,6 @@ const updateUserProfile = async (req, res) => {
     } else {
       res.status(404).json({ message: 'User not found' });
     }
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error updating profile' });
-  }
-};
+});
 
 module.exports = { getUserProfile,updateUserProfile };
