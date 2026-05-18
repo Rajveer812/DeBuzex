@@ -20,7 +20,7 @@ function App() {
       <AuthModal /> 
       
       {/* Main Layout Wrapper */}
-      <div className="flex pt-[10px]">
+      <div className="flex pt-[85px]">
         
         {/* Sidebar */}
         <Sidebar/>

@@ -10,7 +10,7 @@ function Navbar() {
   const { user, setIsModalOpen, logout } = useContext(AuthContext);
 
   return (
-    <nav className="">
+    <nav className="fixed w-full top-0 z-50 bg-[#050c1a]">
       <div className="flex justify-between pt-[15px] px-4 pb-2 shadow-purple-600 border-white/10 border-b">
         
         {/* Logo Section */}
