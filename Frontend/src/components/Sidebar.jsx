@@ -2,6 +2,7 @@ import React,{useState,useEffect,useContext} from 'react';
 import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings,CircleX,PanelRight} from 'lucide-react'
 import MyProfile from '../MyProfile/MyProfile';
 import axios from 'axios'
+
 const Sidebar = () => {
       const [profileData, setProfileData] = useState(null);
       const [loading, setLoading] = useState(true);
@@ -48,7 +49,7 @@ const Sidebar = () => {
           {/* Navigation Links */}
           <nav className="flex flex-col gap-1 border-b border-white/10">
             <NavItem icon={<House />} label="Home" isActive={true} path='/' />
-            <NavItem icon={<MessageCircleMore />} label="Messages" badge="3" />
+            <NavItem icon={<MessageCircleMore />} label="Messages" badge="3" path='/chat' />
             <NavItem icon={<Compass />} label="Feed"  isGreenBadge={true} />
             <NavItem icon={<Bookmark />} label="Saved Problems" />
           </nav>
