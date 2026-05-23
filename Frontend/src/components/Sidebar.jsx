@@ -31,7 +31,7 @@ const Sidebar = () => {
           <nav className="flex flex-col gap-1 border-b border-white/10">
             <NavItem icon={<UserCog />} label="My Profile" path="/myProfile" />
             <NavItem icon={<Settings/>} label="Settings"  path="/setting"/>
-            <NavItem icon={<Compass />} label="About us"  isGreenBadge={true}path="/aboutUs" />
+            <NavItem icon={<Compass />} label="About App"  isGreenBadge={true} path="/aboutApp" />
           </nav>
 
           {/* User Card at the bottom */}
