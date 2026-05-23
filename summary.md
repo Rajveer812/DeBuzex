@@ -43,6 +43,11 @@ To facilitate live debugging sessions, **Socket.io** is heavily integrated into 
 - The server broadcasts an `online users` array to all connected clients.
 - The React frontend listens to this array and dynamically renders "Online" or "Offline" text (with green indicators) in the Chat UI.
 
+### Global Notification Engine & Read Receipts:
+- The `AuthContext` component acts as the global switchboard. It mounts immediately upon login, fetching initial counts for both Unread Notifications and Unread Chats.
+- We utilize `messageModel.distinct('chatId')` to efficiently calculate how many unique conversations require the user's attention, avoiding bloated counts if one user spam-messages them.
+- When the `postController` or `chatController` processes an interaction (like, star, accept, message), it directly accesses the globally stored `Socket.io` instance (`req.app.get('socketio')`) to push targeted JSON payloads to the specific recipient's socket room in real-time.
+
 ---
 
 ## 4. Frontend Component Highlights
@@ -50,6 +55,7 @@ To facilitate live debugging sessions, **Socket.io** is heavily integrated into 
 - **`PostItem.jsx`**: The most versatile component in the app. It is reused in the Main Feed, Explore Tab, User Profile, and Saved Posts. It gracefully handles conditional rendering (e.g., only showing the "Delete" button if the logged-in user is the author, and only allowing the original author to "Accept" a solution).
 - **Dynamic Routing**: Pages like `UserProfile.jsx` and `MyProfile.jsx` use nested tabs (My Posts, Solutions) that dynamically fetch only the data relevant to that specific view, minimizing initial load times.
 - **The "Explore" Page**: A clever repurposing of existing APIs. The "Unsolved Bugs" tab simply fetches all posts and filters out anything where `isResolved === true`, creating an instant "Bounty Board" for developers looking for XP.
+- **Scalable Feed Pagination**: To prevent memory leaks or crashes from rendering massive datasets, `Post.jsx` uses an additive local state model. The backend serves chunks of 10 posts (`limit(10).skip(...)`), which the frontend appends to its `postData` array when the user manually requests more.
 
 ---
 
@@ -57,4 +63,4 @@ To facilitate live debugging sessions, **Socket.io** is heavily integrated into 
 
 - **Authentication**: JWT tokens are securely stored in `localStorage` and sent via Bearer headers on every protected API request.
 - **Change Password**: Handled via `bcrypt.compare` to ensure the user knows their current password before allowing a change.
-- **Graceful Deletion**: When an account is deleted, their document is wiped from MongoDB. However, the frontend is designed with "Graceful Fallbacks" (`post.author?.username || 'Unknown User'`). This ensures that if a deleted user previously left a solution on someone else's post, the thread doesn't crash the React app—it simply renders the author as an anonymous user.
+- **Cascading Deletions**: MongoDB does not natively support SQL-like `ON DELETE CASCADE`. Therefore, the `deleteAccount` API manually executes a series of highly efficient `deleteMany` and `$pull` update operations to scrub the user's authored posts, comments, ratings, and associated notifications. This maintains a pristine database schema over time without accumulating "ghost" data.

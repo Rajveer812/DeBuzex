@@ -14,14 +14,21 @@
 ### 💬 Real-Time Chat & Presence
 - **Socket.io Integration**: Instantly chat with other developers to debug issues live.
 - **Online Presence**: See exactly who is currently online in the chat interface via real-time WebSocket broadcasting.
+- **Unread Message Badges**: Instantly know when someone reaches out. The global sidebar dynamically tracks how many distinct chats have unread messages waiting for you.
 
-### 🧭 Exploration & Filtering
+### 🔔 Global Notifications Engine
+- **Instant Alerts**: Get real-time WebSocket notifications whenever someone likes your post, stars your solution, accepts your fix, or sends a chat request.
+- **Dedicated Notifications Hub**: View your complete history of interactions via a dedicated `/notifications` dashboard with unread tracking.
+
+### 🧭 Exploration & Scalable Feed
 - **Unsolved Bugs Feed**: A dedicated "Hunting Ground" to easily find bugs that still need solutions.
 - **Dynamic Search & Filtering**: Filter posts by Platform (Windows, macOS, Linux, etc.) and Status (Resolved/Unresolved).
+- **Infinite Pagination**: The main feed handles thousands of bugs effortlessly via highly optimized MongoDB `.skip()` and `.limit()` queries and a seamless "Load More" UI.
 
 ### 👤 Comprehensive Account Management
 - **Dynamic Profiles**: View your exact global rank, total XP, and manage all the posts and solutions you've contributed to.
-- **Security Settings**: Change passwords securely (bcrypt validation) or permanently delete your account with graceful fallbacks (your old posts remain under "@Unknown User" so threads don't break!).
+- **Security & Data Privacy**: Change passwords securely (bcrypt validation) or permanently delete your account. 
+- **Cascading Deletes**: When you delete your account, your data isn't left hanging. The backend automatically scrubs all your authored posts, solutions, ratings, and notifications from the platform.
 
 ---
 
