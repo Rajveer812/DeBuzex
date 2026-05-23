@@ -1,9 +1,9 @@
-# DEBuzzer Project Summary
+# DebugIt Project Summary
 
-This document serves as a detailed breakdown of what was built for the **DEBuzzer** platform, how the architecture was designed, and the underlying logic powering its core features.
+This document serves as a detailed breakdown of what was built for the **DebugIt** platform, how the architecture was designed, and the underlying logic powering its core features.
 
 ## 1. Core Architecture & Philosophy
-DEBuzzer is a **MERN stack** application (MongoDB, Express, React, Node.js) heavily focused on **gamification**. The goal was to build a platform that incentivizes developers to help each other by rewarding them with XP, rankings, and visibility.
+DebugIt is a **MERN stack** application (MongoDB, Express, React, Node.js) heavily focused on **gamification**. The goal was to build a platform that incentivizes developers to help each other by rewarding them with XP, rankings, and visibility.
 
 To achieve a seamless user experience, the frontend uses a highly modular React component structure styled with Tailwind CSS, utilizing `Context API` for global state (Auth and Search). The backend acts as a robust JSON API, protected by JWT middleware, and relies on Mongoose schemas to maintain complex relationships between Users, Posts, and Solutions.
 
@@ -11,7 +11,7 @@ To achieve a seamless user experience, the frontend uses a highly modular React 
 
 ## 2. Gamification Logic (XP & Rankings)
 
-The heart of DEBuzzer is its ranking system. Instead of storing a static `XP` number on the user document that requires constant manual updating, the platform dynamically calculates XP using **MongoDB Aggregation Pipelines**.
+The heart of DebugIt is its ranking system. Instead of storing a static `XP` number on the user document that requires constant manual updating, the platform dynamically calculates XP using **MongoDB Aggregation Pipelines**.
 
 ### How it works:
 1. **The Solution Schema**: When a user comments on a post, a sub-document is added to the Post's `solutions` array.

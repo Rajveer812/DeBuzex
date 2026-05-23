@@ -1,6 +1,6 @@
-# 🐛 DEBuzzer
+# 🐛 DebugIt
 
-**DEBuzzer** is a dynamic, gamified collaborative platform for developers. It allows developers to post their nastiest bugs, solve issues for others, earn XP through a peer-rated system, and climb a real-time global leaderboard from *Novice* to *Grandmaster*.
+**DebugIt** is a dynamic, gamified collaborative platform for developers. It allows developers to post their nastiest bugs, solve issues for others, earn XP through a peer-rated system, and climb a real-time global leaderboard from *Novice* to *Grandmaster*.
 
 ---
 
@@ -53,7 +53,7 @@ Make sure you have Node.js and MongoDB installed on your machine.
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd DEBuzzer
+   cd DebugIt
    ```
 
 2. **Setup the Backend**

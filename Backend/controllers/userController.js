@@ -265,8 +265,35 @@ const deleteAccount = asyncHandler(async (req, res) => {
     const user = await userModel.findById(req.user._id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    await userModel.findByIdAndDelete(req.user._id);
-    res.status(200).json({ message: "Account deleted successfully" });
+    const userId = req.user._id;
+
+    // 1. Delete all posts authored by this user
+    await postModel.deleteMany({ author: userId });
+
+    // 2. Remove all solutions authored by this user from any post
+    await postModel.updateMany(
+        { "solutions.author": userId },
+        { $pull: { solutions: { author: userId } } }
+    );
+
+    // 3. Remove any stars given by this user
+    await postModel.updateMany(
+        { "solutions.stars.user": userId },
+        { $pull: { "solutions.$[].stars": { user: userId } } }
+    );
+
+    // 4. Delete notifications linked to this user
+    try {
+        const { notificationModel } = require('../schemas/notificationSchema');
+        await notificationModel.deleteMany({
+            $or: [{ sender: userId }, { recipient: userId }]
+        });
+    } catch (err) {
+        console.error("Error deleting notifications during account deletion", err);
+    }
+
+    await userModel.findByIdAndDelete(userId);
+    res.status(200).json({ message: "Account and associated data deleted successfully" });
 });
 
 module.exports = { getUserProfile, updateUserProfile, getUserByUsername, getLeaderboard, toggleSavePost, getSavedPosts, changePassword, deleteAccount };

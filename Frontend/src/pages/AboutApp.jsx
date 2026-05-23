@@ -14,7 +14,7 @@ function AboutApp() {
           </div>
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold tracking-widest uppercase mb-6 border border-indigo-500/30 shadow-inner shadow-indigo-500/20">
-              <Code2 size={14} /> DEBuzzer Platform
+              <Code2 size={14} /> DebugIt Platform
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tight">
               Squash Bugs.<br/>
@@ -23,7 +23,7 @@ function AboutApp() {
               </span>
             </h1>
             <p className="text-lg text-gray-400 max-w-2xl leading-relaxed font-medium">
-              DEBuzzer is the ultimate collaborative platform for developers. Post your nastiest bugs, solve issues for others, earn XP, and climb the global leaderboard.
+              DebugIt is the ultimate collaborative platform for developers. Post your nastiest bugs, solve issues for others, earn XP, and climb the global leaderboard.
             </p>
           </div>
         </div>

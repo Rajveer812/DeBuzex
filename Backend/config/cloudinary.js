@@ -11,7 +11,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'debuzzer', // Cloudinary folder name
+    folder: 'debugit', // Cloudinary folder name
     allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'gif'],
   }
 });

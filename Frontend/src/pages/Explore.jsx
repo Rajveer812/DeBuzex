@@ -133,7 +133,7 @@ function Explore() {
               <div className="text-center py-10 text-orange-400">Scanning for bugs...</div>
             ) : unsolvedPosts.length === 0 ? (
               <div className="text-center py-10 bg-[#050c1a] rounded-2xl border border-gray-800">
-                <p className="text-gray-400">Wow! Every single bug on DEBuzzer has been solved! 🎉</p>
+                <p className="text-gray-400">Wow! Every single bug on DebugIt has been solved! 🎉</p>
               </div>
             ) : (
               unsolvedPosts.map(post => (
