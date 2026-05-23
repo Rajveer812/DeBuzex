@@ -11,6 +11,7 @@ const sendMessage = asyncHandler(async (req, res) => {
             senderId: req.user._id, // The Bouncer gives us this!
             text: text,
             chatId: chatId,
+            readBy: [req.user._id]
         };
 
         let message = await messageModel.create(newMessageData);
@@ -22,6 +23,12 @@ const sendMessage = asyncHandler(async (req, res) => {
 });
 
 const allMessages = asyncHandler(async(req,res) =>{
+        // Mark all messages in this chat as read by the user
+        await messageModel.updateMany(
+            { chatId: req.params.chatId, readBy: { $ne: req.user._id } },
+            { $push: { readBy: req.user._id } }
+        );
+
         const messages = await messageModel.find({ chatId: req.params.chatId })
             .populate("senderId", "name username profilePic");
 
@@ -29,4 +36,18 @@ const allMessages = asyncHandler(async(req,res) =>{
      
 });
 
-module.exports = { sendMessage, allMessages };
+const getUnreadCount = asyncHandler(async(req, res) => {
+    // 1. Find all active chats for this user
+    const userChats = await chatModel.find({ participants: req.user._id }).select('_id');
+    const chatIds = userChats.map(c => c._id);
+
+    // 2. Find distinct chatIds that have at least one unread message
+    const unreadChats = await messageModel.distinct('chatId', {
+        chatId: { $in: chatIds },
+        readBy: { $ne: req.user._id }
+    });
+
+    res.status(200).json({ unreadCount: unreadChats.length });
+});
+
+module.exports = { sendMessage, allMessages, getUnreadCount };

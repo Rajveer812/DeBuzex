@@ -13,6 +13,9 @@ export const AuthProvider=({children})=>{
     const [notifications, setNotifications] = useState([]);
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
+    // Messages State
+    const [unreadMessageCount, setUnreadMessageCount] = useState(0);
+
     const fetchNotifications = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -23,6 +26,19 @@ export const AuthProvider=({children})=>{
             setNotifications(res.data);
         } catch(err) {
             console.error("Failed to fetch notifications", err);
+        }
+    };
+
+    const fetchUnreadMessageCount = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if(!token) return;
+            const res = await axios.get('http://localhost:5000/api/message/unread-count', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUnreadMessageCount(res.data.unreadCount);
+        } catch (err) {
+            console.error("Failed to fetch unread message count", err);
         }
     };
 
@@ -37,6 +53,7 @@ export const AuthProvider=({children})=>{
                 socket.emit("setup", parsedUser);
             }
             fetchNotifications(); // Initial fetch on load
+            fetchUnreadMessageCount();
         } else {
         // NEW: If no user is found, automatically open the popup!
             setIsModalOpen(true); 
@@ -49,13 +66,18 @@ export const AuthProvider=({children})=>{
         const handleNewNotification = (newNotif) => {
             setNotifications(prev => [newNotif, ...prev]);
         };
+        const handleMessageReceived = () => {
+            fetchUnreadMessageCount(); // Sync with server when message arrives
+        };
 
         socket.on("online users", handleOnlineUsers);
         socket.on("new_notification", handleNewNotification);
+        socket.on("message received", handleMessageReceived);
 
         return () => {
             socket.off("online users", handleOnlineUsers);
             socket.off("new_notification", handleNewNotification);
+            socket.off("message received", handleMessageReceived);
         };
     }, []);
 
@@ -86,6 +108,7 @@ export const AuthProvider=({children})=>{
         setIsModalOpen(false); // 4. Close the popup window automatically
         socket.emit("setup", userData);
         fetchNotifications(); // Fetch notifications immediately after logging in
+        fetchUnreadMessageCount();
     }
 
         const logout = () => {
@@ -101,7 +124,7 @@ export const AuthProvider=({children})=>{
     };
 
     return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser, isModalOpen, setIsModalOpen, onlineUsers, notifications, setNotifications, unreadCount }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, isModalOpen, setIsModalOpen, onlineUsers, notifications, setNotifications, unreadCount, unreadMessageCount, fetchUnreadMessageCount }}>
       {children}
     </AuthContext.Provider>
   );

@@ -3,7 +3,7 @@ import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings,Bell} from 'lu
 import { AuthContext } from '../context/AuthContext';
 
 const Sidebar = () => {
-      const { user, unreadCount } = useContext(AuthContext);
+      const { user, unreadCount, unreadMessageCount } = useContext(AuthContext);
 
       return (
         <aside 
@@ -20,7 +20,7 @@ const Sidebar = () => {
           {/* Navigation Links */}
           <nav className="flex flex-col gap-1 border-b border-white/10">
             <NavItem icon={<House />} label="Home" isActive={true} path='/' />
-            <NavItem icon={<MessageCircleMore />} label="Messages" path='/chat' />
+            <NavItem icon={<MessageCircleMore />} label="Messages" badge={unreadMessageCount > 0 ? unreadMessageCount : null} path='/chat' />
             <NavItem icon={<Bell />} label="Notifications" badge={unreadCount > 0 ? unreadCount : null} path='/notifications' />
             <NavItem icon={<Compass />} label="Explore" isGreenBadge={true} path='/explore' />
             <NavItem icon={<Bookmark />} label="Saved Problems" path="/saved" />

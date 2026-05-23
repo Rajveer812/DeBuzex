@@ -5,7 +5,7 @@ import { Send } from 'lucide-react'; // Make sure you have lucide-react installe
 import { socket } from '../socket';
 
 function Chatarea({ selectedChat }) {
-  const { user, onlineUsers } = useContext(AuthContext);
+  const { user, onlineUsers, fetchUnreadMessageCount } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
@@ -45,6 +45,9 @@ function Chatarea({ selectedChat }) {
         });
         
         setMessages(data); // Put historical messages on screen
+        // Re-fetch global unread count to clear the badge if it was for this chat
+        if (fetchUnreadMessageCount) fetchUnreadMessageCount();
+        
         socket.emit("join chat", selectedChat._id); // Tell Socket.io to tune into this specific chat room
       } catch (error) {
         console.error("Failed to fetch messages", error);
