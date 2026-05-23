@@ -1,0 +1,78 @@
+[
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6d1" },
+    "title": "React useEffect running infinitely",
+    "description": "My useEffect hook is causing an infinite loop when fetching data. I have added dependencies but it still loops. Can someone explain why this is happening?",
+    "platform": "Windows",
+    "author": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c2" },
+    "isResolved": true,
+    "images": [],
+    "likes": [{ "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" }, { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" }],
+    "solutions": [
+      {
+        "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6e1" },
+        "text": "Make sure your dependency array isn't containing an object or array that is re-created on every render. If you are defining an object inside the component, it gets a new reference every render!",
+        "author": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" },
+        "isAccepted": true,
+        "stars": [
+          {
+            "user": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c2" },
+            "rating": 5
+          }
+        ],
+        "createdAt": { "$date": "2024-01-03T12:00:00Z" }
+      }
+    ],
+    "createdAt": { "$date": "2024-01-03T10:00:00Z" },
+    "updatedAt": { "$date": "2024-01-03T10:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6d2" },
+    "title": "MongoDB aggregation pipeline optimization",
+    "description": "My pipeline is too slow. I'm grouping by author and then sorting, but it takes 5 seconds on 1M records. Any tips on indexing?",
+    "platform": "Linux",
+    "author": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" },
+    "isResolved": false,
+    "images": [],
+    "likes": [{ "$oid": "64a7c1b2f0c1d2e3f4a5b6c2" }],
+    "solutions": [
+      {
+        "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6e2" },
+        "text": "Ensure that your $match stage is the very first stage in the pipeline so it can utilize the index. If you sort or group first, it has to scan the whole collection.",
+        "author": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" },
+        "isAccepted": false,
+        "stars": [],
+        "createdAt": { "$date": "2024-01-04T11:00:00Z" }
+      }
+    ],
+    "createdAt": { "$date": "2024-01-04T10:00:00Z" },
+    "updatedAt": { "$date": "2024-01-04T10:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6d3" },
+    "title": "How to center a div in Tailwind?",
+    "description": "I know flexbox works but what is the exact Tailwind utility classes to just perfectly center a child div?",
+    "platform": "MacOS",
+    "author": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" },
+    "isResolved": true,
+    "images": [],
+    "likes": [],
+    "solutions": [
+      {
+        "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6e3" },
+        "text": "Use `flex items-center justify-center` on the parent container! Alternatively, `grid place-items-center` is even shorter.",
+        "author": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c2" },
+        "isAccepted": true,
+        "stars": [
+          {
+            "user": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" },
+            "rating": 4
+          }
+        ],
+        "createdAt": { "$date": "2024-01-05T09:00:00Z" }
+      }
+    ],
+    "createdAt": { "$date": "2024-01-05T08:00:00Z" },
+    "updatedAt": { "$date": "2024-01-05T08:00:00Z" }
+  }
+]

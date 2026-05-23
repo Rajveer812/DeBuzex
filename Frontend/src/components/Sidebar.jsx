@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings} from 'lucide-react';
+import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings,Bell} from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 
 const Sidebar = () => {
-      const { user } = useContext(AuthContext);
+      const { user, unreadCount } = useContext(AuthContext);
 
       return (
         <aside 
@@ -21,6 +21,7 @@ const Sidebar = () => {
           <nav className="flex flex-col gap-1 border-b border-white/10">
             <NavItem icon={<House />} label="Home" isActive={true} path='/' />
             <NavItem icon={<MessageCircleMore />} label="Messages" path='/chat' />
+            <NavItem icon={<Bell />} label="Notifications" badge={unreadCount > 0 ? unreadCount : null} path='/notifications' />
             <NavItem icon={<Compass />} label="Explore" isGreenBadge={true} path='/explore' />
             <NavItem icon={<Bookmark />} label="Saved Problems" path="/saved" />
           </nav>

@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute');
 const chatRoute = require('./routes/chatRoute');
 const messageRoute = require('./routes/messageRoute');
+const notificationRoute = require('./routes/notificationRoute');
 
 connectDB(); // connect db
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/post', postRoute);
 app.use('/api/chat', chatRoute);
 app.use('/api/message', messageRoute);
+app.use('/api/notifications', notificationRoute);
 
 const PORT = process.env.PORT || 5000;
 
@@ -38,6 +40,8 @@ const io = require("socket.io")(server, {
     origin: "http://localhost:5173", // CRITICAL: Ensure this matches your React frontend URL!
   },
 });
+
+app.set('socketio', io); // Attach io to app so we can access it in controllers!
 
 const onlineUsers = new Map();
 

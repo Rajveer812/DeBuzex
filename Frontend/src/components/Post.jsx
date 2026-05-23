@@ -8,6 +8,9 @@ import FilterBar from './FilterBar'
 function Post() {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState('');
   
   const [selectedPlatform, setSelectedPlatform] = useState('All');
@@ -20,8 +23,10 @@ function Post() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/post");
+        const response = await axios.get("http://localhost:5000/api/post?page=1&limit=10");
         setPostData(response.data);
+        setHasMore(response.data.length === 10);
+        setPage(1);
         setLoading(false);
       } catch (error) {
         setError(error.response?.data?.message || 'Error fetching posts');
@@ -30,6 +35,22 @@ function Post() {
     };
     fetchPost();
   }, []);
+
+  const loadMore = async () => {
+    if (loadingMore) return;
+    try {
+      setLoadingMore(true);
+      const nextPage = page + 1;
+      const response = await axios.get(`http://localhost:5000/api/post?page=${nextPage}&limit=10`);
+      setPostData(prev => [...prev, ...response.data]);
+      setPage(nextPage);
+      setHasMore(response.data.length === 10);
+      setLoadingMore(false);
+    } catch (error) {
+      console.log("Error loading more posts:", error);
+      setLoadingMore(false);
+    }
+  };
 
   const handleLike = async (postId) => {
     try {
@@ -156,6 +177,18 @@ function Post() {
           />
         </div>
       ))}
+
+      {hasMore && filteredPosts.length > 0 && (
+        <div className="flex justify-center mt-4 mb-8">
+          <button 
+            onClick={loadMore}
+            disabled={loadingMore}
+            className="px-6 py-2 bg-[#1e2330] hover:bg-[#2a3142] text-sky-400 font-semibold rounded-full border border-sky-500/30 transition-all disabled:opacity-50"
+          >
+            {loadingMore ? 'Loading...' : 'Load More Bugs'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

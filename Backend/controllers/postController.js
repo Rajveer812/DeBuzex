@@ -1,5 +1,6 @@
 const {postModel}=require('../models/postModel');
 const { userModel } = require('../models/userModel');
+const { notificationModel } = require('../schemas/notificationSchema');
 
 const createPost=async (req,res)=>{
     try{
@@ -33,8 +34,14 @@ const createPost=async (req,res)=>{
 
 const getAllPosts=async(req,res)=>{
     try{
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
         const posts=await postModel.find()
         .sort({createdAt:-1})
+        .skip(skip)
+        .limit(limit)
         .populate('author','name username profilePic')
         .populate('solutions.author', 'name username profilePic');
         res.status(200).json(posts);
@@ -59,6 +66,18 @@ const likePost = async (req, res) => {
         if (index === -1) {
             // Like the post
             post.likes.push(userId);
+            
+            // Create Notification
+            if (post.author.toString() !== userId.toString()) {
+                const newNotification = await notificationModel.create({
+                    recipient: post.author,
+                    sender: userId,
+                    type: 'like',
+                    post: post._id
+                });
+                const io = req.app.get('socketio');
+                if(io) io.in(post.author.toString()).emit("new_notification", newNotification);
+            }
         } else {
             // Unlike the post
             post.likes.splice(index, 1);
@@ -91,6 +110,18 @@ const addSolution = async (req, res) => {
 
         post.solutions.push(newSolution);
         await post.save();
+
+        // Create Notification
+        if (post.author.toString() !== req.user._id.toString()) {
+            const newNotification = await notificationModel.create({
+                recipient: post.author,
+                sender: req.user._id,
+                type: 'solution',
+                post: post._id
+            });
+            const io = req.app.get('socketio');
+            if(io) io.in(post.author.toString()).emit("new_notification", newNotification);
+        }
 
         res.status(201).json({ message: "Solution added successfully", solutions: post.solutions });
     } catch (error) {
@@ -134,6 +165,18 @@ const starSolution = async (req, res) => {
         
         if (existingRatingIndex === -1) {
             solution.stars.push({ user: userId, rating: Number(rating) });
+            
+            // Create Notification only if it's a new rating
+            if (solution.author.toString() !== userId.toString()) {
+                const newNotification = await notificationModel.create({
+                    recipient: solution.author,
+                    sender: userId,
+                    type: 'star',
+                    post: post._id
+                });
+                const io = req.app.get('socketio');
+                if(io) io.in(solution.author.toString()).emit("new_notification", newNotification);
+            }
         } else {
             solution.stars[existingRatingIndex].rating = Number(rating);
         }
@@ -184,6 +227,22 @@ const acceptSolution = async (req, res) => {
         // If a solution is accepted, mark the post as resolved
         if (solution.isAccepted) {
             post.isResolved = true;
+            
+            // Create Notification
+            if (solution.author.toString() !== req.user._id.toString()) {
+                const newNotification = await notificationModel.create({
+                    recipient: solution.author,
+                    sender: req.user._id,
+                    type: 'accept',
+                    post: post._id
+                });
+                const io = req.app.get('socketio');
+                if(io) io.in(solution.author.toString()).emit("new_notification", newNotification);
+            }
+        } else {
+             // If un-accepting, we might want to check if any other solutions are still accepted to maintain isResolved
+             const anyAccepted = post.solutions.some(s => s.isAccepted);
+             post.isResolved = anyAccepted;
         }
 
         await post.save();

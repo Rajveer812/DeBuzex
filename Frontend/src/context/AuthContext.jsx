@@ -1,4 +1,5 @@
 import React,{createContext,useState,useEffect} from 'react';
+import axios from 'axios';
 export const AuthContext=createContext();
 import { socket } from '../socket';
 
@@ -7,6 +8,23 @@ export const AuthProvider=({children})=>{
 
     const [isModalOpen,setIsModalOpen]=useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    
+    // Notifications State
+    const [notifications, setNotifications] = useState([]);
+    const unreadCount = notifications.filter(n => !n.isRead).length;
+
+    const fetchNotifications = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if(!token) return;
+            const res = await axios.get('http://localhost:5000/api/notifications', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setNotifications(res.data);
+        } catch(err) {
+            console.error("Failed to fetch notifications", err);
+        }
+    };
 
     // Check if a user is already logged in when the app loads
     useEffect(() => {
@@ -18,6 +36,7 @@ export const AuthProvider=({children})=>{
             if (socket.connected) {
                 socket.emit("setup", parsedUser);
             }
+            fetchNotifications(); // Initial fetch on load
         } else {
         // NEW: If no user is found, automatically open the popup!
             setIsModalOpen(true); 
@@ -27,10 +46,16 @@ export const AuthProvider=({children})=>{
         const handleOnlineUsers = (users) => {
             setOnlineUsers(users);
         };
+        const handleNewNotification = (newNotif) => {
+            setNotifications(prev => [newNotif, ...prev]);
+        };
+
         socket.on("online users", handleOnlineUsers);
+        socket.on("new_notification", handleNewNotification);
 
         return () => {
             socket.off("online users", handleOnlineUsers);
+            socket.off("new_notification", handleNewNotification);
         };
     }, []);
 
@@ -60,6 +85,7 @@ export const AuthProvider=({children})=>{
         localStorage.setItem('token',userData.token); // 3. Save the actual secret VIP Wristband (the JWT token) from the backend
         setIsModalOpen(false); // 4. Close the popup window automatically
         socket.emit("setup", userData);
+        fetchNotifications(); // Fetch notifications immediately after logging in
     }
 
         const logout = () => {
@@ -75,7 +101,7 @@ export const AuthProvider=({children})=>{
     };
 
     return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser, isModalOpen, setIsModalOpen, onlineUsers }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, isModalOpen, setIsModalOpen, onlineUsers, notifications, setNotifications, unreadCount }}>
       {children}
     </AuthContext.Provider>
   );

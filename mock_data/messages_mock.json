@@ -1,0 +1,26 @@
+[
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6a1" },
+    "chatId": { "$oid": "64a7c1b2f0c1d2e3f4a5b6f1" },
+    "senderId": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" },
+    "text": "Hey Alice, thanks for marking my solution as accepted on your React post!",
+    "createdAt": { "$date": "2024-01-05T10:01:00Z" },
+    "updatedAt": { "$date": "2024-01-05T10:01:00Z" }
+  },
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6a2" },
+    "chatId": { "$oid": "64a7c1b2f0c1d2e3f4a5b6f1" },
+    "senderId": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c2" },
+    "text": "No problem at all! It saved me hours of debugging.",
+    "createdAt": { "$date": "2024-01-05T10:05:00Z" },
+    "updatedAt": { "$date": "2024-01-05T10:05:00Z" }
+  },
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6a3" },
+    "chatId": { "$oid": "64a7c1b2f0c1d2e3f4a5b6f2" },
+    "senderId": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" },
+    "text": "Hi Rajveer! Any chance you could look at my Mongo query?",
+    "createdAt": { "$date": "2024-01-06T14:00:00Z" },
+    "updatedAt": { "$date": "2024-01-06T14:00:00Z" }
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" },
+    "name": "Rajveer Jain",
+    "username": "rajveer_mock",
+    "email": "rajveer_mock@example.com",
+    "password": "$2a$10$7/O/zY81FWeA9UaP4T9t0O.qYq23yO0h.K.N9T2q20M8G5.69q5M2",
+    "bio": "Full Stack Developer. Building DEBuzzer!",
+    "reputationStars": 150,
+    "profilePic": "default-avatar.png",
+    "savedPosts": [],
+    "createdAt": { "$date": "2024-01-01T12:00:00Z" },
+    "updatedAt": { "$date": "2024-01-01T12:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c2" },
+    "name": "Alice Smith",
+    "username": "alice_dev",
+    "email": "alice@example.com",
+    "password": "$2a$10$7/O/zY81FWeA9UaP4T9t0O.qYq23yO0h.K.N9T2q20M8G5.69q5M2",
+    "bio": "Frontend Master and UI/UX Enthusiast",
+    "reputationStars": 50,
+    "profilePic": "default-avatar.png",
+    "savedPosts": [],
+    "createdAt": { "$date": "2024-01-02T12:00:00Z" },
+    "updatedAt": { "$date": "2024-01-02T12:00:00Z" }
+  },
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" },
+    "name": "Bob The Builder",
+    "username": "bob_builds",
+    "email": "bob@example.com",
+    "password": "$2a$10$7/O/zY81FWeA9UaP4T9t0O.qYq23yO0h.K.N9T2q20M8G5.69q5M2",
+    "bio": "Backend architecture is my passion.",
+    "reputationStars": 80,
+    "profilePic": "default-avatar.png",
+    "savedPosts": [],
+    "createdAt": { "$date": "2024-01-03T12:00:00Z" },
+    "updatedAt": { "$date": "2024-01-03T12:00:00Z" }
+  }
+]

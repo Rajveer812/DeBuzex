@@ -1,0 +1,26 @@
+[
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6f1" },
+    "participants": [
+      { "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" },
+      { "$oid": "64a7c1b2f0c1d2e3f4a5b6c2" }
+    ],
+    "initiator": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" },
+    "status": "accepted",
+    "latestMessage": { "$oid": "64a7c1b2f0c1d2e3f4a5b6a2" },
+    "createdAt": { "$date": "2024-01-05T10:00:00Z" },
+    "updatedAt": { "$date": "2024-01-05T10:05:00Z" }
+  },
+  {
+    "_id": { "$oid": "64a7c1b2f0c1d2e3f4a5b6f2" },
+    "participants": [
+      { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" },
+      { "$oid": "64a7c1b2f0c1d2e3f4a5b6c1" }
+    ],
+    "initiator": { "$oid": "64a7c1b2f0c1d2e3f4a5b6c3" },
+    "status": "pending",
+    "latestMessage": { "$oid": "64a7c1b2f0c1d2e3f4a5b6a3" },
+    "createdAt": { "$date": "2024-01-06T14:00:00Z" },
+    "updatedAt": { "$date": "2024-01-06T14:00:00Z" }
+  }
+]

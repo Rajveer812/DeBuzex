@@ -12,6 +12,7 @@ import SavedPosts from './pages/SavedPosts.jsx'
 import Settings from './pages/Settings.jsx'
 import Explore from './pages/Explore.jsx'
 import AboutApp from './pages/AboutApp.jsx'
+import Notifications from './pages/Notifications.jsx'
 
 // CHANGE 1: Import your new AuthModal component
 import AuthModal from './components/Auth/AuthModal' 
@@ -42,6 +43,7 @@ function App() {
             <Route path='/setting' element={<Settings/>}/>
             <Route path='/explore' element={<Explore/>}/>
             <Route path='/aboutApp' element={<AboutApp/>}/>
+            <Route path='/notifications' element={<Notifications/>}/>
             <Route path='/user/:username' element={<UserProfile/>}/>
           </Routes>
         </main>

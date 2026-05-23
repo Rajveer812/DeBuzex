@@ -32,6 +32,20 @@ const accessChat = asyncHandler(async (req, res) => {
             // Build the room in the database
             const createdChat = await chatModel.create(chatData);
 
+            // Create Notification
+            try {
+                const { notificationModel } = require('../schemas/notificationSchema');
+                const newNotification = await notificationModel.create({
+                    recipient: userId,
+                    sender: req.user._id,
+                    type: 'chat_request'
+                });
+                const io = req.app.get('socketio');
+                if(io) io.in(userId.toString()).emit("new_notification", newNotification);
+            } catch (err) {
+                console.error("Error creating chat notification", err);
+            }
+
             // Fetch that brand new room and populate the names so the frontend can display them
             const FullChat = await chatModel.findOne({ _id: createdChat._id })
                 .populate("participants", "-password");
