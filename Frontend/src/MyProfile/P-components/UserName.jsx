@@ -1,41 +1,8 @@
-import React,{useState,useEffect,useContext} from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import avatar from '../../assets/Designer1.png'
-import axios from 'axios'
 
-function UserName() {
-    const [profileData, setProfileData] = useState(null);
-    const [loading, setLoading] = useState(true);
-     const [error, setError] = useState('');
-
-     useEffect(()=>{
-        const fetchProfile=async()=>{
-            try{
-                const token=localStorage.getItem("token");
-                if (!token) {
-                    setError("You need to be logged in to view this profile.");
-                    setLoading(false);
-                    return;
-                }
-
-                const response = await axios.get('http://localhost:5000/api/users/profile', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setProfileData(response.data);
-                setLoading(false);
-
-            }catch(err){
-                setError("Failed to load profile data");
-                setLoading(false);
-            }
-        };
-        fetchProfile();
-     },[]);
-    if (loading) return <div className="p-8 text-sky-400">Loading profile...</div>;
-    if (error) return <div className="p-8 text-red-400">{error}</div>;
-
+function UserName({ profileData }) {
+    if (!profileData) return null;
 
     return (
         <div className='rounded-xl bg-[#0b1d35]  p-8 grid grid-cols-8'>
@@ -43,7 +10,13 @@ function UserName() {
         <div className='  grid grid-cols-9 grid-flow-col col-span-7'>
 
             <div className='col-span-1'>
-                <img className='rounded-xl block-20 border-2  border-r-indigo-500' src={avatar}></img>
+                {profileData.profilePic && profileData.profilePic !== "default-avatar.png" ? (
+                  <img className='rounded-xl block-20 border-2 border-indigo-500 object-cover w-20 h-20' src={profileData.profilePic} alt="avatar"></img>
+                ) : (
+                  <div className="rounded-xl border-2 border-indigo-500 w-20 h-20 bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-4xl">
+                    {profileData.username.charAt(0).toUpperCase()}
+                  </div>
+                )}
             </div>
 
             <div className='col-span-8 wrap-break-word'>

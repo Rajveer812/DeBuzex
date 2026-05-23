@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 // 1. IMPORT THE PROVIDER
 import { AuthProvider } from './context/AuthContext' 
+import { SearchProvider } from './context/SearchContext'
 
 import './index.css'
 import App from './App.jsx'
@@ -12,9 +13,11 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       
-      {/* 2. WRAP THE APP WITH THE PROVIDER */}
+      {/* 2. WRAP THE APP WITH THE PROVIDERS */}
       <AuthProvider>
-        <App />
+        <SearchProvider>
+          <App />
+        </SearchProvider>
       </AuthProvider>
       
     </BrowserRouter>

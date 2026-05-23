@@ -23,6 +23,9 @@ const postSchema=new mongoose.Schema({
         type:Boolean,
         default:false,
     },
+    images:[{
+        type:String
+    }],
     likes:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'user'

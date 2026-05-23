@@ -18,7 +18,13 @@ function TopRankers({ leaderboard }) {
                         <div className={`w-6 text-center font-bold text-sm ${index === 0 ? 'text-yellow-400' : index === 1 ? 'text-gray-300' : index === 2 ? 'text-amber-600' : 'text-gray-500'}`}>
                             #{index + 1}
                         </div>
-                        <img src={user.profilePic || "default-avatar.png"} alt="avatar" className='w-8 h-8 rounded-full border border-indigo-500/30 object-cover' />
+                      {user.profilePic && user.profilePic !== "default-avatar.png" ? (
+                        <img src={user.profilePic} alt="avatar" className='w-8 h-8 rounded-full border border-indigo-500/30 object-cover' />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-xs flex-shrink-0">
+                          {user.username?.charAt(0).toUpperCase()}
+                        </div>
+                      )}
                         <div className='flex flex-col'>
                             <p className='text-sm font-semibold text-gray-200 leading-tight'>{user.name}</p>
                             <p className='text-xs text-gray-400'>@{user.username}</p>

@@ -6,6 +6,7 @@ export const AuthProvider=({children})=>{
     const[user,setUser]=useState(null);
 
     const [isModalOpen,setIsModalOpen]=useState(false);
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     // Check if a user is already logged in when the app loads
     useEffect(() => {
@@ -21,6 +22,16 @@ export const AuthProvider=({children})=>{
         // NEW: If no user is found, automatically open the popup!
             setIsModalOpen(true); 
         }
+
+        // Listen for global online users updates
+        const handleOnlineUsers = (users) => {
+            setOnlineUsers(users);
+        };
+        socket.on("online users", handleOnlineUsers);
+
+        return () => {
+            socket.off("online users", handleOnlineUsers);
+        };
     }, []);
 
     // Ensure we ALWAYS setup the user room when socket connects/reconnects
@@ -56,8 +67,15 @@ export const AuthProvider=({children})=>{
         localStorage.removeItem('userInfo');
         localStorage.removeItem('token');
     };
+
+    const updateUser = (newUserData) => {
+        const updatedUser = { ...user, ...newUserData };
+        setUser(updatedUser);
+        localStorage.setItem('userInfo', JSON.stringify(updatedUser));
+    };
+
     return (
-    <AuthContext.Provider value={{ user, login, logout, isModalOpen, setIsModalOpen }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, isModalOpen, setIsModalOpen, onlineUsers }}>
       {children}
     </AuthContext.Provider>
   );

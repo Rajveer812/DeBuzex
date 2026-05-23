@@ -7,11 +7,21 @@ const createPost=async (req,res)=>{
         if (!title || !description || !platform) {
             return res.status(400).json({ message: "Please provide a title, description, and platform." });
         }
+
+        // Extract image URLs from Cloudinary upload
+        const images = [];
+        if (req.files && req.files.length > 0) {
+            req.files.forEach(file => {
+                images.push(file.path);
+            });
+        }
+
         const newPost=await postModel.create({
             title,
             description,
             platform,
-            author: req.user._id
+            author: req.user._id,
+            images
         });
         res.status(201).json(newPost)
     }
@@ -24,7 +34,7 @@ const createPost=async (req,res)=>{
 const getAllPosts=async(req,res)=>{
     try{
         const posts=await postModel.find()
-        .sort({created:-1})
+        .sort({createdAt:-1})
         .populate('author','name username profilePic')
         .populate('solutions.author', 'name username profilePic');
         res.status(200).json(posts);
@@ -187,4 +197,60 @@ const acceptSolution = async (req, res) => {
     }
 };
 
-module.exports = { createPost, getAllPosts, likePost, addSolution, starSolution, acceptSolution };
+const getUserPosts = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const user = await userModel.findOne({ username });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        const posts = await postModel.find({ author: user._id })
+            .sort({ createdAt: -1 })
+            .populate('author', 'name username profilePic')
+            .populate('solutions.author', 'name username profilePic');
+            
+        res.status(200).json(posts);
+    } catch (error) {
+        console.log("Error fetching user posts:", error);
+        res.status(500).json({ message: "Server error fetching user posts" });
+    }
+};
+
+const getUserSolutions = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const user = await userModel.findOne({ username });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        const posts = await postModel.find({ "solutions.author": user._id })
+            .sort({ createdAt: -1 })
+            .populate('author', 'name username profilePic')
+            .populate('solutions.author', 'name username profilePic');
+            
+        res.status(200).json(posts);
+    } catch (error) {
+        console.log("Error fetching user solutions:", error);
+        res.status(500).json({ message: "Server error fetching user solutions" });
+    }
+};
+
+const deletePost = async (req, res) => {
+    try {
+        const post = await postModel.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+        
+        // Ensure only the author can delete
+        if (post.author.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Unauthorized to delete this post" });
+        }
+
+        await postModel.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Post deleted successfully" });
+    } catch (error) {
+        console.log("Error deleting post:", error);
+        res.status(500).json({ message: "Server error deleting post" });
+    }
+};
+
+module.exports = { createPost, getAllPosts, likePost, addSolution, starSolution, acceptSolution, getUserPosts, getUserSolutions, deletePost };

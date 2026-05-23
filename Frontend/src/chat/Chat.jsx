@@ -7,13 +7,13 @@ function Chat() {
   const [selectedChat, setSelectedChat] = useState(null);
 
   return (
-    <div className='grid grid-cols-8 gap-4 h-screen bg-[#050c1a]'>
-        <div className='col-span-2 h-full border-r border-white/10'>
+    <div className='grid grid-cols-8 gap-4 h-[calc(100vh-85px)] bg-[#050c1a] overflow-hidden'>
+        <div className='col-span-2 h-full min-h-0 border-r border-white/10'>
             {/* We pass the state and the updater function to the list */}
             <Chatlist selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
         </div>
         
-        <div className='col-span-6 h-full bg-[#050c1a]'>
+        <div className='col-span-6 h-full min-h-0 bg-[#050c1a]'>
             {/* We only need to pass the state to the area so it knows what to load */}
             <Chatarea selectedChat={selectedChat} />
         </div>

@@ -5,7 +5,7 @@ import { Send } from 'lucide-react'; // Make sure you have lucide-react installe
 import { socket } from '../socket';
 
 function Chatarea({ selectedChat }) {
-  const { user } = useContext(AuthContext);
+  const { user, onlineUsers } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
@@ -126,40 +126,67 @@ function Chatarea({ selectedChat }) {
 
   // Figure out the name of the person we are talking to
   const otherUser = selectedChat.participants.find(p => p._id !== user._id);
+  const isOtherUserOnline = otherUser ? onlineUsers.includes(otherUser._id) : false;
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full overflow-hidden relative">
       
       {/* HEADER */}
-      <div className="h-[70px] border-b border-white/10 bg-[#050c1a]/95 flex items-center px-6">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center shrink-0 uppercase text-lg">
-          {otherUser ? otherUser.username.charAt(0) : '?'}
-        </div>
+      <div className="shrink-0 h-[70px] border-b border-white/10 bg-[#050c1a]/95 flex items-center px-6 sticky top-0 z-10">
+        {otherUser?.profilePic && otherUser.profilePic !== "default-avatar.png" ? (
+          <img src={otherUser.profilePic} alt="avatar" className="w-10 h-10 rounded-full object-cover shrink-0 border border-white/20" />
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center shrink-0 uppercase text-lg">
+            {otherUser ? otherUser.username.charAt(0) : '?'}
+          </div>
+        )}
         <div className="ml-4">
           <h2 className="text-white font-bold text-lg">{otherUser ? otherUser.username : "Unknown User"}</h2>
-          {socketConnected ? (
-            <p className="text-xs text-green-400">Online</p>
+          {isOtherUserOnline ? (
+            <p className="text-xs text-green-400 font-medium">Online</p>
           ) : (
-            <p className="text-xs text-yellow-500">Connecting...</p>
+            <p className="text-xs text-gray-500">Offline</p>
           )}
         </div>
       </div>
 
       {/* MESSAGES AREA */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-4">
         {messages.map((msg, index) => {
           // Check if WE sent the message, or if THEY sent it
           const isMyMessage = msg.senderId._id === user._id;
 
           return (
-            <div key={index} className={`flex ${isMyMessage ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[70%] px-4 py-3 rounded-2xl ${
+            <div key={index} className={`flex items-end gap-2 ${isMyMessage ? "justify-end" : "justify-start"}`}>
+              
+              {!isMyMessage && (
+                otherUser?.profilePic && otherUser.profilePic !== "default-avatar.png" ? (
+                  <img src={otherUser.profilePic} alt="avatar" className="w-6 h-6 rounded-full object-cover shrink-0 mb-1 border border-white/10" />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center shrink-0 text-[10px] mb-1">
+                    {otherUser?.username?.charAt(0).toUpperCase() || '?'}
+                  </div>
+                )
+              )}
+
+              <div className={`max-w-[70%] px-4 py-3 rounded-2xl text-sm ${
                 isMyMessage 
-                  ? "bg-blue-600 text-white rounded-br-sm" // Our texts are blue and on the right
-                  : "bg-[#1e2330] text-gray-200 border border-white/10 rounded-bl-sm" // Their texts are dark gray on the left
+                  ? "bg-blue-600 text-white rounded-br-sm shadow-[0_4px_14px_rgba(37,99,235,0.3)]"
+                  : "bg-[#1e2330] text-gray-200 border border-white/10 rounded-bl-sm" 
               }`}>
                 {msg.text}
               </div>
+
+              {isMyMessage && (
+                user?.profilePic && user.profilePic !== "default-avatar.png" ? (
+                  <img src={user.profilePic} alt="avatar" className="w-6 h-6 rounded-full object-cover shrink-0 mb-1 border border-white/10" />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center shrink-0 text-[10px] mb-1">
+                    {user?.username?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                )
+              )}
+
             </div>
           );
         })}
@@ -168,7 +195,7 @@ function Chatarea({ selectedChat }) {
       </div>
 
       {/* INPUT AREA */}
-      <div className="p-4 bg-[#050c1a] border-t border-white/10">
+      <div className="shrink-0 p-4 bg-[#050c1a] border-t border-white/10 sticky bottom-0 z-10 mt-auto">
         <form onSubmit={sendMessage} className="flex gap-2">
           <input
             type="text"

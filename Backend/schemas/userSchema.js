@@ -30,7 +30,11 @@ const userSchema = new mongoose.Schema({
   profilePic: { 
     type: String, 
     default: "default-avatar.png" 
-  }
+  },
+  savedPosts: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'post' 
+  }]
 }, { timestamps: true }); 
 
 userSchema.pre('save', async function() {

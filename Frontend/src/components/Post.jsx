@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { AuthContext } from '../context/AuthContext'
+import { SearchContext } from '../context/SearchContext'
 import PostItem from './PostItem'
+import FilterBar from './FilterBar'
 
 function Post() {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // Auth context
+  const [selectedPlatform, setSelectedPlatform] = useState('All');
+  const [selectedStatus, setSelectedStatus] = useState('All');
+  
+  // Contexts
   const { user } = useContext(AuthContext);
+  const { searchQuery } = useContext(SearchContext);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -101,18 +107,54 @@ function Post() {
   if (loading) return <div className="text-center py-4 text-gray-400">Loading posts...</div>;
   if (error) return <div className="text-center py-4 text-red-500">Error: {error}</div>;
 
+  // Derive filtered posts
+  const filteredPosts = postData.filter(post => {
+    // 1. Search filter
+    const searchLower = (searchQuery || '').toLowerCase();
+    const matchesSearch = 
+        post.title?.toLowerCase().includes(searchLower) || 
+        post.description?.toLowerCase().includes(searchLower);
+        
+    // 2. Platform filter
+    const matchesPlatform = selectedPlatform === 'All' || post.platform === selectedPlatform;
+    
+    // 3. Status filter
+    let matchesStatus = true;
+    if (selectedStatus === 'Solved') {
+        matchesStatus = post.isResolved === true;
+    } else if (selectedStatus === 'Unsolved') {
+        matchesStatus = post.isResolved === false;
+    }
+    
+    return matchesSearch && matchesPlatform && matchesStatus;
+  });
+
   return (
-    <div className="flex flex-col gap-6">
-      {postData?.map((post) => (
-        <PostItem 
-          key={post._id} 
-          post={post} 
-          user={user} 
-          onLike={handleLike} 
-          onSubmitSolution={submitSolution} 
-          onStar={handleStar}
-          onAccept={handleAccept}
-        />
+    <div className="flex flex-col gap-2">
+      <FilterBar 
+        selectedPlatform={selectedPlatform} 
+        setSelectedPlatform={setSelectedPlatform} 
+        selectedStatus={selectedStatus} 
+        setSelectedStatus={setSelectedStatus} 
+      />
+      
+      {filteredPosts.length === 0 && !loading && (
+        <div className="text-center py-10 bg-[#0b1d35] rounded-2xl border border-gray-800">
+           <p className="text-gray-400">No bugs found matching your filters. 🐛</p>
+        </div>
+      )}
+
+      {filteredPosts?.map((post) => (
+        <div key={post._id} className="mb-4">
+          <PostItem 
+            post={post} 
+            user={user} 
+            onLike={handleLike} 
+            onSubmitSolution={submitSolution} 
+            onStar={handleStar}
+            onAccept={handleAccept}
+          />
+        </div>
       ))}
     </div>
   );

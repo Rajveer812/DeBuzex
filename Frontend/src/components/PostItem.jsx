@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import avatar from '../assets/Designer1.png';
-import { ThumbsUp, MessageSquare, Eye, EyeOff, Star, CheckCircle } from 'lucide-react';
+import { ThumbsUp, MessageSquare, Eye, EyeOff, Star, CheckCircle, Bookmark, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
-export default function PostItem({ post, user, onLike, onSubmitSolution, onStar, onAccept }) {
+export default function PostItem({ post, user, onLike, onSubmitSolution, onStar, onAccept, onDelete }) {
+  const { updateUser } = useContext(AuthContext);
   const [isWritingSolution, setIsWritingSolution] = useState(false);
   const [solutionText, setSolutionText] = useState('');
   const [showSolutions, setShowSolutions] = useState(false);
@@ -19,6 +22,24 @@ export default function PostItem({ post, user, onLike, onSubmitSolution, onStar,
   };
 
   const isLiked = user && post.likes?.includes(user._id);
+  const isSaved = user && user.savedPosts?.includes(post._id);
+
+  const handleToggleSave = async () => {
+    if (!user) {
+      alert("Please login to save posts");
+      return;
+    }
+    try {
+      const response = await axios.put(`http://localhost:5000/api/users/save-post/${post._id}`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      // The API returns the updated savedPosts array
+      updateUser({ savedPosts: response.data.savedPosts });
+    } catch (error) {
+      console.error("Failed to toggle save", error);
+      alert("Failed to save post");
+    }
+  };
 
   const handleToggleWriteSolution = () => {
     if (!user) {
@@ -40,23 +61,58 @@ export default function PostItem({ post, user, onLike, onSubmitSolution, onStar,
     <div className="bg-[#0b1d35] rounded-2xl p-5 shadow-lg border border-gray-800 transition hover:border-gray-700">
       <div className="flex items-center gap-3 mb-4">
         <Link to={`/user/${post.author?.username}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <img 
-            src={post.author?.profilePic || avatar} 
-            alt="Avatar" 
-            className="h-12 w-12 rounded-full border-2 border-indigo-500 object-cover" 
-          />
+          {post.author?.profilePic && post.author.profilePic !== "default-avatar.png" ? (
+            <img 
+              src={post.author.profilePic} 
+              alt="Avatar" 
+              className="h-12 w-12 rounded-full border-2 border-indigo-500 object-cover" 
+            />
+          ) : (
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-xl">
+              {post.author?.username?.charAt(0).toUpperCase() || 'U'}
+            </div>
+          )}
           <div>
             <p className="font-semibold text-gray-100 text-lg">@{post.author?.username || 'Unknown User'}</p>
             <p className="text-xs text-gray-400">{new Date(post.createdAt).toLocaleDateString()}</p>
           </div>
         </Link>
+        
+        {/* Delete Button (visible only if user is author and onDelete is provided) */}
+        {user && post.author && user._id === (post.author._id || post.author) && onDelete && (
+          <button 
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this post?")) {
+                onDelete(post._id);
+              }
+            }}
+            className="ml-auto text-gray-500 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-500/10"
+            title="Delete Post"
+          >
+            <Trash2 size={18} />
+          </button>
+        )}
       </div>
 
-      {/* Body: Post Content */}
       <div className="mb-4">
         <h2 className="text-xl font-bold text-white mb-2">{post.title}</h2>
         <p className="text-gray-300 leading-relaxed whitespace-pre-wrap break-words">{post.description}</p>
         
+        {/* Render Bug Images if any */}
+        {post.images && post.images.length > 0 && (
+          <div className="mt-4 flex overflow-x-auto gap-3 pb-2 custom-scrollbar">
+            {post.images.map((imgUrl, idx) => (
+              <a key={idx} href={imgUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
+                <img 
+                  src={imgUrl} 
+                  alt={`Screenshot ${idx + 1}`} 
+                  className="h-48 object-cover rounded-lg border border-gray-700/50 hover:border-indigo-500 transition-colors cursor-pointer" 
+                />
+              </a>
+            ))}
+          </div>
+        )}
+
         <div className="mt-3 inline-block bg-indigo-900/50 text-indigo-300 px-3 py-1 rounded-full text-sm font-medium border border-indigo-700/50">
           {post.platform}
         </div>
@@ -79,6 +135,14 @@ export default function PostItem({ post, user, onLike, onSubmitSolution, onStar,
           >
             <MessageSquare className="w-5 h-5" />
             <span>Write Solution</span>
+          </button>
+
+          <button 
+            onClick={handleToggleSave}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition ${isSaved ? 'text-yellow-500 bg-yellow-900/20' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
+          >
+            <Bookmark className={`w-5 h-5 ${isSaved ? "fill-current" : ""}`} />
+            <span>Save</span>
           </button>
         </div>
 
@@ -128,7 +192,13 @@ export default function PostItem({ post, user, onLike, onSubmitSolution, onStar,
               <div key={index} className={`text-sm text-gray-200 bg-[#050c1a] p-4 rounded-lg border ${sol.isAccepted ? 'border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.15)]' : 'border-gray-800/50'}`}>
                 {/* Solution Author Info */}
                 <div className="flex items-center gap-2 mb-2">
-                  <img src={sol.author?.profilePic || avatar} alt="avatar" className="w-6 h-6 rounded-full border border-gray-600" />
+                  {sol.author?.profilePic && sol.author.profilePic !== "default-avatar.png" ? (
+                    <img src={sol.author.profilePic} alt="avatar" className="w-6 h-6 rounded-full border border-gray-600 object-cover" />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-[10px]">
+                      {sol.author?.username?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                   <Link to={`/user/${sol.author?.username}`} className="text-xs font-semibold text-gray-300 hover:text-white hover:underline">
                     @{sol.author?.username || 'Unknown'}
                   </Link>

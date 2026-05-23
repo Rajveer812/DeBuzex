@@ -1,36 +1,51 @@
 import React, { useState, useContext } from "react";
-import img from "../assets/Designer1.png";
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
 function CreatePost() {
+  const { user } = useContext(AuthContext);
   const [error, setError] = useState('');
   
   // FIXED: Changed 'category' to 'platform' to match your backend PostSchema
-  const [formData, setFormData] = useState({title:'', description: '', platform: '', image:''});
+  const [formData, setFormData] = useState({title:'', description: '', platform: ''});
+  const [images, setImages] = useState([]);
   
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      setImages(Array.from(e.target.files));
+    }
+  };
+
   const handleSubmit = async (e) => { 
+    e.preventDefault();
     setError('');
 
     try {
-      // 1. Grab the token from storage
       const token = localStorage.getItem('token');
 
-      // 2. Attach the token to the headers! 
-      // NOTE: Make sure this URL matches your backend route exactly! 
-      // (Earlier we set it up as /api/posts)
-      const response = await axios.post('http://localhost:5000/api/post/newpost ', formData, {
+      const submitData = new FormData();
+      submitData.append('title', formData.title);
+      submitData.append('description', formData.description);
+      submitData.append('platform', formData.platform);
+      
+      images.forEach(img => {
+        submitData.append('images', img);
+      });
+
+      const response = await axios.post('http://localhost:5000/api/post/newpost ', submitData, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
         }
       });
 
       // 3. Success! Clear the form so they can write another post
-      setFormData({title:'', description: '', platform: '', image:''});
+      setFormData({title:'', description: '', platform: ''});
+      setImages([]);
       alert("Problem posted successfully!");
       
     } catch (err) {
@@ -47,7 +62,13 @@ function CreatePost() {
 
         <div className="">
           <div className="flex gap-x-2 pb-2">
-            <img src={img} alt="user" className="w-10 h-10 rounded-full " />
+            {user?.profilePic && user.profilePic !== "default-avatar.png" ? (
+              <img src={user.profilePic} alt="user" className="w-10 h-10 rounded-full object-cover border border-gray-600" />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-lg flex-shrink-0">
+                {user?.username?.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
             <input 
               className="rounded-md bg-[#0b1830] p-2 w-full text-white focus:outline-none" 
               name="title" 
@@ -98,8 +119,8 @@ function CreatePost() {
 
         <div className="flex items-center justify-between mt-4 gap-4">
           <label className="cursor-pointer bg-[#162544] hover:bg-[#1b2d52] text-white transition px-4 py-2 rounded-lg border border-white/10 text-sm">
-            Upload Image  
-            <input type="file" accept="image/*" className="hidden" />
+            {images.length > 0 ? `Images Selected (${images.length})` : "Upload Image(s)"}
+            <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" />
           </label>
           <button type="submit" className="bg-blue-600 hover:bg-blue-700 transition px-5 py-2 rounded-lg text-white font-medium">Submit</button>
         </div>

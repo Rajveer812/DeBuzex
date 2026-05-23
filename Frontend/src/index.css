@@ -5,3 +5,27 @@
   --font-syne: "Syne", sans-serif;
   --font-outfit:"Outfit",sans-serif;
 }
+
+/* Custom Dark Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e2330; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6; 
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1e2330 transparent;
+}

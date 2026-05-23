@@ -33,6 +33,7 @@ const registerUser=asyncHandler(async(req,res)=>{
                 email: newUser.email,
                 bio: newUser.bio,          
                 profilePic: newUser.profilePic,
+                savedPosts: [], // newly registered user has no saved posts
                 token: generateToken(newUser._id)
             }
         }); 
@@ -51,6 +52,7 @@ const loginUser=asyncHandler(async(req,res)=>{
                 email: user.email,
                 bio: user.bio,            
                 profilePic: user.profilePic,
+                savedPosts: user.savedPosts || [],
                 token: generateToken(user._id)
                 }
             });

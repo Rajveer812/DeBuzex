@@ -8,6 +8,9 @@ import MyProfile from './MyProfile/MyProfile'
 import EditProfile from './MyProfile/EditProfile'
 import UserProfile from './Users/UserProfile.jsx'
 import Chat from './chat/Chat.jsx'
+import SavedPosts from './pages/SavedPosts.jsx'
+import Settings from './pages/Settings.jsx'
+import Explore from './pages/Explore.jsx'
 
 // CHANGE 1: Import your new AuthModal component
 import AuthModal from './components/Auth/AuthModal' 
@@ -34,6 +37,9 @@ function App() {
             <Route path="/myProfile" element={<MyProfile />} />
             <Route path='/editProfile' element={<EditProfile/>}/>
             <Route path='/chat' element={<Chat/>}/>
+            <Route path='/saved' element={<SavedPosts/>}/>
+            <Route path='/setting' element={<Settings/>}/>
+            <Route path='/explore' element={<Explore/>}/>
             <Route path='/user/:username' element={<UserProfile/>}/>
           </Routes>
         </main>

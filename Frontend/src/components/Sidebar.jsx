@@ -1,38 +1,9 @@
-import React,{useState,useEffect,useContext} from 'react';
-import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings,CircleX,PanelRight} from 'lucide-react'
-import MyProfile from '../MyProfile/MyProfile';
-import axios from 'axios'
+import React, { useContext } from 'react';
+import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings} from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 
 const Sidebar = () => {
-      const [profileData, setProfileData] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [error, setError] = useState('');
-
-      useEffect(()=>{
-        const fetchProfile=async()=>{
-            try{
-                const token=localStorage.getItem("token");
-                if (!token) {
-                    setError("You need to be logged in to view this profile.");
-                    setLoading(false);
-                    return;
-                }
-
-                const response = await axios.get('http://localhost:5000/api/users/profile', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setProfileData(response.data);
-                setLoading(false);
-
-            }catch(err){
-                setError("Failed to load profile data");
-                setLoading(false);
-            }
-        };
-        fetchProfile();
-     },[]);
+      const { user } = useContext(AuthContext);
 
       return (
         <aside 
@@ -49,9 +20,9 @@ const Sidebar = () => {
           {/* Navigation Links */}
           <nav className="flex flex-col gap-1 border-b border-white/10">
             <NavItem icon={<House />} label="Home" isActive={true} path='/' />
-            <NavItem icon={<MessageCircleMore />} label="Messages" badge="3" path='/chat' />
-            <NavItem icon={<Compass />} label="Feed"  isGreenBadge={true} />
-            <NavItem icon={<Bookmark />} label="Saved Problems" />
+            <NavItem icon={<MessageCircleMore />} label="Messages" path='/chat' />
+            <NavItem icon={<Compass />} label="Explore" isGreenBadge={true} path='/explore' />
+            <NavItem icon={<Bookmark />} label="Saved Problems" path="/saved" />
           </nav>
 
           <div className="text-[10px] font-bold tracking-widest text-[#555d72] uppercase mb-2 mt-6 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:px-2">
@@ -66,14 +37,18 @@ const Sidebar = () => {
           {/* User Card at the bottom */}
           <div className="mt-auto mb-9">
             <div className="bg-[#1e2330] border border-white/10 rounded-xl p-2 group-hover:p-3 transition-all duration-300 flex items-center">
-              <div className="w-[34px] h-[34px] rounded-lg bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center shrink-0 text-xs">
-                RK
-              </div>
+              {user?.profilePic && user.profilePic !== "default-avatar.png" ? (
+                <img src={user.profilePic} alt="avatar" className="w-[34px] h-[34px] rounded-lg object-cover shrink-0 border border-white/20" />
+              ) : (
+                <div className="w-[34px] h-[34px] rounded-lg bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center shrink-0 text-xs">
+                  {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                </div>
+              )}
               
               {/* User Details - Fade and expand on hover */}
               <div className="w-0 opacity-0 overflow-hidden transition-all duration-300 group-hover:w-auto group-hover:opacity-100 group-hover:ml-3">
-                <div className="text-[13px] font-bold text-white whitespace-nowrap">{profileData?.name}</div>
-                <div className="text-[11px] text-[#8b92a8]">@{profileData?.username}</div>
+                <div className="text-[13px] font-bold text-white whitespace-nowrap">{user?.name}</div>
+                <div className="text-[11px] text-[#8b92a8]">@{user?.username}</div>
               </div>
             </div>
           </div>

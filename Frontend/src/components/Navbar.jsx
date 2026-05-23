@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 
 // 1. Import the Context we created earlier
 import { AuthContext } from '../context/AuthContext';
+import SearchBar from './SearchBar';
 
 function Navbar() {
   // 2. Grab the user data and functions from the Loudspeaker
@@ -22,15 +23,7 @@ function Navbar() {
         
         {/* Search Section */}
         <div className="">
-          <form className="flex items-center">
-            <input 
-              className="bg-[#0E1F3D] rounded-full py-2 px-10 w-130 inset-ring-blue-300 inset-ring-1 text-white" 
-              placeholder="Search" 
-            />
-            <button className="border border-white/10 py-2 px-2 rounded-full ml-2" type="submit"> 
-              <Search size={16} color="#223b5d" strokeWidth={3} />
-            </button>
-          </form>
+          <SearchBar />
         </div>
         
         {/* Auth Section (The Magic Happens Here) */}
@@ -43,10 +36,14 @@ function Navbar() {
                 Hi, {user.username}
               </span>
               
-              {/* Cool Avatar Circle using the first letter of their username */}
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-lg">
-                {user.username.charAt(0).toUpperCase()}
-              </div>
+              {/* Avatar */}
+              {user.profilePic && user.profilePic !== "default-avatar.png" ? (
+                <img src={user.profilePic} alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white/20" />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6ee7b7] to-[#60a5fa] text-[#0d0f14] font-bold flex items-center justify-center text-lg border border-white/20">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
+              )}
 
               <button 
                 onClick={logout}

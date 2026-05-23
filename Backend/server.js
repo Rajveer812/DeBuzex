@@ -39,13 +39,24 @@ const io = require("socket.io")(server, {
   },
 });
 
+const onlineUsers = new Map();
+
 io.on("connection", (socket) => {
   console.log("🔌 A user connected to the Switchboard!");
 
   // ACTION 1: User logs in, create their personal notification room
   socket.on("setup", (userData) => {
     socket.join(userData._id);
+    socket.userId = userData._id; // Attach to socket for cleanup
+    
+    // Add to online users map (handle multiple tabs for same user)
+    const currentCount = onlineUsers.get(userData._id) || 0;
+    onlineUsers.set(userData._id, currentCount + 1);
+
     console.log(`User ${userData.username || 'Unknown'} is online.`);
+    
+    // Broadcast the full list of online user IDs to EVERYONE
+    io.emit("online users", Array.from(onlineUsers.keys()));
     socket.emit("connected");
   });
 
@@ -87,6 +98,17 @@ io.on("connection", (socket) => {
 
   // Clean up when the user closes the tab or app
   socket.on("disconnect", () => {
+    if (socket.userId) {
+      const currentCount = onlineUsers.get(socket.userId);
+      if (currentCount <= 1) {
+        onlineUsers.delete(socket.userId); // Completely offline
+      } else {
+        onlineUsers.set(socket.userId, currentCount - 1); // Still has other tabs open
+      }
+      
+      // Update everyone on the new list
+      io.emit("online users", Array.from(onlineUsers.keys()));
+    }
     console.log("🔌 User Disconnected");
   });
 });
