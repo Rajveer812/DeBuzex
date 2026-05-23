@@ -30,6 +30,11 @@ const postSchema=new mongoose.Schema({
     solutions: [{
         text: { type: String, required: true },
         author: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+        isAccepted: { type: Boolean, default: false },
+        stars: [{ 
+            user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+            rating: { type: Number, required: true, min: 1, max: 5 }
+        }],
         createdAt: { type: Date, default: Date.now }
     }],
     createdAt:{

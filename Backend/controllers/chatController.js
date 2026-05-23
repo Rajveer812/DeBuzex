@@ -26,6 +26,7 @@ const accessChat = asyncHandler(async (req, res) => {
         else {
             const chatData = {
                 participants: [req.user._id, userId],
+                initiator: req.user._id,
             };
 
             // Build the room in the database
@@ -51,4 +52,29 @@ const fetchChats = asyncHandler(async(req,res)=>{
         res.status(200).json(results);
 });
 
-module.exports = { accessChat,fetchChats };
+const updateChatStatus = async (req, res) => {
+    try {
+        const { chatId, status } = req.body;
+        if (!chatId || !status) {
+            return res.status(400).json({ message: "Please provide chatId and status." });
+        }
+
+        const updatedChat = await chatModel.findByIdAndUpdate(
+            chatId,
+            { status: status },
+            { new: true } // This tells Mongoose to return the updated version, not the old one
+        ).populate("participants", "-password");
+
+        if (!updatedChat) {
+            return res.status(404).json({ message: "Chat not found." });
+        }
+
+        res.status(200).json(updatedChat);
+    } catch (error) {
+        console.log("Error updating chat status:", error);
+        res.status(500).json({ message: "Server error updating status." });
+    }
+};
+
+// CRITICAL: Export all THREE functions now!
+module.exports = { accessChat, fetchChats, updateChatStatus };

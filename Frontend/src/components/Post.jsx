@@ -70,6 +70,34 @@ function Post() {
     }
   };
 
+  const handleStar = async (postId, solutionId, rating) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/star`, { rating }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setPostData(postData.map(post => {
+        if (post._id === postId) return { ...post, solutions: response.data.solutions };
+        return post;
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAccept = async (postId, solutionId) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/accept`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setPostData(postData.map(post => {
+        if (post._id === postId) return { ...post, solutions: response.data.solutions, isResolved: response.data.isResolved };
+        return post;
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (loading) return <div className="text-center py-4 text-gray-400">Loading posts...</div>;
   if (error) return <div className="text-center py-4 text-red-500">Error: {error}</div>;
 
@@ -82,6 +110,8 @@ function Post() {
           user={user} 
           onLike={handleLike} 
           onSubmitSolution={submitSolution} 
+          onStar={handleStar}
+          onAccept={handleAccept}
         />
       ))}
     </div>

@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import avatar from '../assets/Designer1.png';
-import { ThumbsUp, MessageSquare, Eye, EyeOff } from 'lucide-react';
+import { ThumbsUp, MessageSquare, Eye, EyeOff, Star, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export default function PostItem({ post, user, onLike, onSubmitSolution }) {
+export default function PostItem({ post, user, onLike, onSubmitSolution, onStar, onAccept }) {
   const [isWritingSolution, setIsWritingSolution] = useState(false);
   const [solutionText, setSolutionText] = useState('');
   const [showSolutions, setShowSolutions] = useState(false);
+  const [hoveredStar, setHoveredStar] = useState({ solutionId: null, rating: 0 });
+
+  const calculateAverageRating = (stars) => {
+    if (!stars || stars.length === 0) return "0.0";
+    const validStars = stars.filter(s => s && s.rating !== undefined);
+    if (validStars.length === 0) return "0.0";
+    
+    const sum = validStars.reduce((acc, curr) => acc + curr.rating, 0);
+    return (sum / validStars.length).toFixed(1);
+  };
 
   const isLiked = user && post.likes?.includes(user._id);
 
@@ -28,15 +39,17 @@ export default function PostItem({ post, user, onLike, onSubmitSolution }) {
   return (
     <div className="bg-[#0b1d35] rounded-2xl p-5 shadow-lg border border-gray-800 transition hover:border-gray-700">
       <div className="flex items-center gap-3 mb-4">
-        <img 
-          src={post.author?.profilePic || avatar} 
-          alt="Avatar" 
-          className="h-12 w-12 rounded-full border-2 border-indigo-500 object-cover" 
-        />
-        <div>
-          <p className="font-semibold text-gray-100 text-lg">@{post.author?.username || 'Unknown User'}</p>
-          <p className="text-xs text-gray-400">{new Date(post.createdAt).toLocaleDateString()}</p>
-        </div>
+        <Link to={`/user/${post.author?.username}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <img 
+            src={post.author?.profilePic || avatar} 
+            alt="Avatar" 
+            className="h-12 w-12 rounded-full border-2 border-indigo-500 object-cover" 
+          />
+          <div>
+            <p className="font-semibold text-gray-100 text-lg">@{post.author?.username || 'Unknown User'}</p>
+            <p className="text-xs text-gray-400">{new Date(post.createdAt).toLocaleDateString()}</p>
+          </div>
+        </Link>
       </div>
 
       {/* Body: Post Content */}
@@ -112,8 +125,71 @@ export default function PostItem({ post, user, onLike, onSubmitSolution }) {
           <h3 className="text-sm font-semibold text-gray-300 mb-3 border-b border-gray-700 pb-2">Solutions</h3>
           <div className="flex flex-col gap-3">
             {post.solutions.map((sol, index) => (
-              <div key={index} className="text-sm text-gray-200 bg-[#050c1a] p-3 rounded-lg border border-gray-800/50">
-                {sol.text}
+              <div key={index} className={`text-sm text-gray-200 bg-[#050c1a] p-4 rounded-lg border ${sol.isAccepted ? 'border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.15)]' : 'border-gray-800/50'}`}>
+                {/* Solution Author Info */}
+                <div className="flex items-center gap-2 mb-2">
+                  <img src={sol.author?.profilePic || avatar} alt="avatar" className="w-6 h-6 rounded-full border border-gray-600" />
+                  <Link to={`/user/${sol.author?.username}`} className="text-xs font-semibold text-gray-300 hover:text-white hover:underline">
+                    @{sol.author?.username || 'Unknown'}
+                  </Link>
+                  {sol.isAccepted && (
+                    <span className="ml-auto flex items-center gap-1 text-green-500 font-semibold text-xs bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20">
+                      <CheckCircle size={12} fill="currentColor" /> Verified Fix
+                    </span>
+                  )}
+                </div>
+                
+                {/* Solution Text */}
+                <p className="mb-3 pl-8 text-gray-300">{sol.text}</p>
+                
+                {/* Solution Actions */}
+                <div className="flex items-center gap-4 border-t border-gray-800/50 pt-2 pl-8">
+                  
+                  {/* 5-Star Rating System */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                      {[1, 2, 3, 4, 5].map((starValue) => {
+                        // Safely extract the user's rating, handling legacy strings
+                        const userStarObj = sol.stars?.find(s => {
+                           if (!s) return false;
+                           const sUserId = s.user?._id || s.user || s;
+                           return sUserId === user?._id;
+                        });
+                        const userRating = userStarObj?.rating || 0;
+                        
+                        const isFilled = hoveredStar.solutionId === sol._id 
+                          ? starValue <= hoveredStar.rating 
+                          : starValue <= userRating;
+                        
+                        return (
+                          <button
+                            key={starValue}
+                            onMouseEnter={() => setHoveredStar({ solutionId: sol._id, rating: starValue })}
+                            onMouseLeave={() => setHoveredStar({ solutionId: null, rating: 0 })}
+                            onClick={() => onStar(post._id, sol._id, starValue)}
+                            className={`transition-colors p-0.5 ${isFilled ? 'text-yellow-500' : 'text-gray-600 hover:text-yellow-400'}`}
+                            disabled={!user}
+                          >
+                            <Star size={16} fill={isFilled ? "currentColor" : "none"} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <span className="text-xs text-gray-400 font-medium">
+                      {calculateAverageRating(sol.stars)} <span className="text-gray-600">({sol.stars?.length || 0} reviews)</span>
+                    </span>
+                  </div>
+                  
+                  {/* Accept button: Visible ONLY to post author, and if it's not accepted yet */}
+                  {user && post.author && user._id === (post.author._id || post.author) && !sol.isAccepted && (
+                    <button 
+                      onClick={() => onAccept(post._id, sol._id)}
+                      className="flex items-center gap-1.5 text-gray-500 hover:text-green-500 transition-colors ml-auto"
+                    >
+                      <CheckCircle size={16} /> <span className="text-xs font-medium">Accept Fix</span>
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

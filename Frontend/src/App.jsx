@@ -6,7 +6,8 @@ import Sidebar from './components/Sidebar'
 import PostArea from './pages/PostArea'
 import MyProfile from './MyProfile/MyProfile'
 import EditProfile from './MyProfile/EditProfile'
-import Chat from './chat/Chat'
+import UserProfile from './Users/UserProfile.jsx'
+import Chat from './chat/Chat.jsx'
 
 // CHANGE 1: Import your new AuthModal component
 import AuthModal from './components/Auth/AuthModal' 
@@ -33,6 +34,7 @@ function App() {
             <Route path="/myProfile" element={<MyProfile />} />
             <Route path='/editProfile' element={<EditProfile/>}/>
             <Route path='/chat' element={<Chat/>}/>
+            <Route path='/user/:username' element={<UserProfile/>}/>
           </Routes>
         </main>
       </div>
