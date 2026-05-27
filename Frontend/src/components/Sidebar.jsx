@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import {House,MessageCircleMore,Compass,Bookmark,UserCog,Settings,Bell} from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 
@@ -19,7 +20,7 @@ const Sidebar = () => {
 
           {/* Navigation Links */}
           <nav className="flex flex-col gap-1 border-b border-white/10">
-            <NavItem icon={<House />} label="Home" isActive={true} path='/' />
+            <NavItem icon={<House />} label="Home" path='/' />
             <NavItem icon={<MessageCircleMore />} label="Messages" badge={unreadMessageCount > 0 ? unreadMessageCount : null} path='/chat' />
             <NavItem icon={<Bell />} label="Notifications" badge={unreadCount > 0 ? unreadCount : null} path='/notifications' />
             <NavItem icon={<Compass />} label="Explore" isGreenBadge={true} path='/explore' />
@@ -58,9 +59,12 @@ const Sidebar = () => {
     };
 
     // --- Helper Component for the Links ---
-    const NavItem = ({ icon, label, isActive, badge, isGreenBadge,path }) => {
+    const NavItem = ({ icon, label, badge, isGreenBadge, path }) => {
+      const location = useLocation();
+      const isActive = location.pathname === path;
+
       return (
-        <a href={path} className={`flex items-center p-2.5 rounded-lg cursor-pointer transition-all duration-200 overflow-hidden ${
+        <Link to={path} className={`flex items-center p-2.5 rounded-lg cursor-pointer transition-all duration-200 overflow-hidden ${
           isActive 
             ? 'bg-[#6ee7b7]/10 text-[#6ee7b7] border border-[#6ee7b7]/20' 
             : 'text-[#8b92a8] hover:bg-[#1e2330] hover:text-white'
@@ -82,7 +86,7 @@ const Sidebar = () => {
               {badge}
             </span>
           )}
-        </a>
+        </Link>
       );
     };
 

@@ -100,8 +100,8 @@ function Explore() {
   };
 
   return (
-    <div className="grid grid-cols-3">
-      <div className="col-span-2 py-4 max-w-3xl pr-6 h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar">
+    <div className="flex w-full">
+      <div className="flex-1 py-4 pr-6 h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar min-w-0">
         
         {/* Header & Navigation */}
         <div className="bg-[#0b1d35] rounded-xl p-4 border border-gray-800 mb-6 sticky top-0 z-10">
@@ -213,7 +213,7 @@ function Explore() {
         )}
       </div>
 
-      <div className="col-span-1">
+      <div className="w-[350px] shrink-0">
         <RightSidebar />
       </div>
     </div>

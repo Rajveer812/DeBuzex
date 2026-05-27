@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Heart, MessageSquare, Star, CheckCircle, UserPlus, Bell } from 'lucide-react';
 
+
 function Notifications() {
   const { notifications, setNotifications } = useContext(AuthContext);
 
@@ -54,8 +55,8 @@ function Notifications() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-8">
-      <div className="flex items-center gap-3 mb-8">
+    <div className="py-4 pr-6">
+      <div className="flex items-center gap-3 mb-6 border-b border-gray-800 pb-4">
         <Bell className="w-8 h-8 text-sky-400" />
         <h1 className="text-3xl font-bold text-white">Notifications</h1>
       </div>

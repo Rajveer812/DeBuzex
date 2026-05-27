@@ -5,17 +5,15 @@ import Post from "../components/Post";
 
 function PostArea() {
   return (
-    <div className="grid grid-cols-3">
-
-      <div className="col-span-2 ">
+    <div className="flex w-full">
+      <div className="flex-1 pr-6 min-w-0">
         <div className="py-2"><CreatePost /></div>
         <div className="py-2"><Post /></div>
       </div>
 
-      <div className="col-span-2">
+      <div className="w-[350px] shrink-0">
         <div><RightSidebar /></div>
       </div>
-
     </div>
   );
 }

@@ -91,8 +91,8 @@ function SavedPosts() {
   };
 
   return (
-    <div className="grid grid-cols-3">
-      <div className="col-span-2 py-4">
+    <div className="flex w-full">
+      <div className="flex-1 py-4 pr-6 min-w-0">
         <h1 className="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-yellow-500">Saved Problems</h1>
         
         {loading ? (
@@ -124,7 +124,7 @@ function SavedPosts() {
         )}
       </div>
 
-      <div className="col-span-1">
+      <div className="w-[350px] shrink-0">
         <RightSidebar />
       </div>
     </div>

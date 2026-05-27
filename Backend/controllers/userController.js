@@ -86,9 +86,9 @@ const getUserByUsername = asyncHandler(async (req, res) => {
       const avgStars = totalReviews > 0 ? (totalStars / totalReviews).toFixed(1) : 0;
 
       let rank = "Novice Debugger";
-      if (totalStars >= 100) rank = "Grandmaster";
-      else if (totalStars >= 40) rank = "Master Debugger";
-      else if (totalStars >= 10) rank = "Advanced Debugger";
+      if (totalStars >= 500) rank = "Grandmaster";
+      else if (totalStars >= 200) rank = "Master Debugger";
+      else if (totalStars >= 50) rank = "Advanced Debugger";
 
       // Calculate total posts made by user
       const userPosts = await postModel.find({ author: user._id });
