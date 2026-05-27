@@ -76,18 +76,17 @@ function Settings() {
 
   if (!user) {
     return (
-      <div className="grid grid-cols-3">
-        <div className="col-span-2 py-10 text-center text-gray-400">
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="py-10 text-center text-gray-400">
           Please log in to view settings.
         </div>
-        <div className="col-span-1"><RightSidebar /></div>
       </div>
     );
   }
 
   return (
-    <div className="flex w-full">
-      <div className="flex-1 py-4 pr-6 min-w-0">
+    <div className="w-full max-w-4xl mx-auto py-8 px-4 h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar">
+      <div className="flex-1 min-w-0">
         <h1 className="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-indigo-500">Account Settings</h1>
 
         {/* 1. Account Overview */}
@@ -208,10 +207,6 @@ function Settings() {
             </button>
           </form>
         </section>
-      </div>
-
-      <div className="w-[350px] shrink-0">
-        <RightSidebar />
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Zap, Medal, Trophy } from 'lucide-react';
 
 function MyRanking({ stats }) {
+  const navigate = useNavigate();
   if (!stats) return null;
 
   // Calculate XP out of next tier (e.g., Novice 0-100, Advanced 100-400)
@@ -66,7 +68,7 @@ function MyRanking({ stats }) {
       </div>
 
       {/* Full Leaderboard Button */}
-      <button className="w-full flex items-center bg-[#131c2e] hover:bg-[#1a263e] transition-colors border border-white/5 rounded-xl p-3 group">
+      <button onClick={() => navigate('/explore', { state: { activeTab: 'leaderboard' } })} className="w-full flex items-center bg-[#131c2e] hover:bg-[#1a263e] transition-colors border border-white/5 rounded-xl p-3 group">
         <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shrink-0">
           <Trophy size={22} className="text-white" />
         </div>

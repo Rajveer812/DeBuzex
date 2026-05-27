@@ -135,7 +135,7 @@ function Chatarea({ selectedChat }) {
     <div className="flex flex-col h-full w-full overflow-hidden relative">
       
       {/* HEADER */}
-      <div className="shrink-0 h-[70px] border-b border-white/10 bg-[#050c1a]/95 flex items-center px-6 sticky top-0 z-10">
+      <div className="shrink-0 h-[70px] border-b border-white/10 bg-[#050c1a]/85 backdrop-blur-lg flex items-center px-6 sticky top-0 z-10">
         {otherUser?.profilePic && otherUser.profilePic !== "default-avatar.png" ? (
           <img src={otherUser.profilePic} alt="avatar" className="w-10 h-10 rounded-full object-cover shrink-0 border border-white/20" />
         ) : (
@@ -174,8 +174,8 @@ function Chatarea({ selectedChat }) {
 
               <div className={`max-w-[70%] px-4 py-3 rounded-2xl text-sm ${
                 isMyMessage 
-                  ? "bg-blue-600 text-white rounded-br-sm shadow-[0_4px_14px_rgba(37,99,235,0.3)]"
-                  : "bg-[#1e2330] text-gray-200 border border-white/10 rounded-bl-sm" 
+                  ? "bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-br-sm shadow-md shadow-indigo-500/20 border border-indigo-400/20"
+                  : "bg-white/5 backdrop-blur-md text-gray-200 border border-white/10 rounded-bl-sm shadow-sm" 
               }`}>
                 {msg.text}
               </div>

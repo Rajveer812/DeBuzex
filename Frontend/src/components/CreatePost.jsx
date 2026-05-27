@@ -54,10 +54,13 @@ function CreatePost() {
   };
 
   return (
-    <form className="border rounded-xl bg-[#0E1F3D] border-white/10 p-3" onSubmit={handleSubmit}>
-      {error && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg text-center">{error}</div>}
+    <form className="border border-white/5 border-t-sky-500/50 rounded-2xl bg-gradient-to-br from-[#0f172a] via-[#0b1d35] to-[#020617] p-5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] relative overflow-hidden group" onSubmit={handleSubmit}>
+      {/* Animated Background Glow */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/5 rounded-full blur-3xl -mr-16 -mt-16 transition-all duration-700 group-hover:bg-sky-400/10 pointer-events-none"></div>
       
-      <div>
+      {error && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg text-center relative z-10 mb-3">{error}</div>}
+      
+      <div className="relative z-10">
         <h3 className="p-2 text-white font-bold">Post a Problem</h3>
 
         <div className="">
@@ -114,6 +117,10 @@ function CreatePost() {
           <div className="flex gap-1 items-center">
             <input type="radio" id="macos" name="platform" value="MacOS" onChange={handleChange} checked={formData.platform === "MacOS"} />
             <label htmlFor="macos">MacOS</label>
+          </div>
+          <div className="flex gap-1 items-center">
+            <input type="radio" id="linux" name="platform" value="Linux" onChange={handleChange} checked={formData.platform === "Linux"} />
+            <label htmlFor="linux">Linux</label>
           </div>
         </div>
 

@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { useLocation } from 'react-router-dom';
 import PostItem from '../components/PostItem';
 import { Compass, Trophy, Bug, Medal, CheckCircle } from 'lucide-react';
 import RightSidebar from '../components/RightSidebar/RightSidebar';
 
 function Explore() {
   const { user } = useContext(AuthContext);
-  const [activeTab, setActiveTab] = useState('unsolved');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'unsolved');
   
   // State for Unsolved Bugs
   const [unsolvedPosts, setUnsolvedPosts] = useState([]);
@@ -101,28 +103,30 @@ function Explore() {
 
   return (
     <div className="flex w-full">
-      <div className="flex-1 py-4 pr-6 h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar min-w-0">
+      <div className="flex-1 pr-6 h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar min-w-0 pb-4 relative">
         
-        {/* Header & Navigation */}
-        <div className="bg-[#0b1d35] rounded-xl p-4 border border-gray-800 mb-6 sticky top-0 z-10">
-          <div className="flex items-center gap-3 mb-4">
-            <Compass className="text-indigo-400" size={28} />
-            <h1 className="text-2xl font-bold text-white">Explore</h1>
-          </div>
-          
-          <div className="flex gap-2">
-            <button 
-              onClick={() => setActiveTab('unsolved')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'unsolved' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
-            >
-              <Bug size={18} /> Unsolved Bugs
-            </button>
-            <button 
-              onClick={() => setActiveTab('leaderboard')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'leaderboard' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
-            >
-              <Trophy size={18} /> Full Leaderboard
-            </button>
+        {/* Header & Navigation Wrapper */}
+        <div className="sticky top-0 z-20 bg-[#050c1a] pt-4 pb-6">
+          <div className="bg-[#0b1d35] rounded-xl p-4 border border-gray-800 shadow-md">
+            <div className="flex items-center gap-3 mb-4">
+              <Compass className="text-indigo-400" size={28} />
+              <h1 className="text-2xl font-bold text-white">Explore</h1>
+            </div>
+            
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setActiveTab('unsolved')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'unsolved' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
+              >
+                <Bug size={18} /> Unsolved Bugs
+              </button>
+              <button 
+                onClick={() => setActiveTab('leaderboard')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'leaderboard' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
+              >
+                <Trophy size={18} /> Full Leaderboard
+              </button>
+            </div>
           </div>
         </div>
 

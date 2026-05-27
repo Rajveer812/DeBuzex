@@ -58,8 +58,11 @@ export default function PostItem({ post, user, onLike, onSubmitSolution, onStar,
   };
 
   return (
-    <div className="bg-[#0b1d35] rounded-2xl p-5 shadow-lg border border-gray-800 transition hover:border-gray-700">
-      <div className="flex items-center gap-3 mb-4">
+    <div className="bg-gradient-to-br from-[#0f172a] via-[#0b1d35] to-[#020617] rounded-2xl p-5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-white/5 border-t-indigo-500/30 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] hover:border-white/10 hover:-translate-y-0.5 group relative overflow-hidden">
+      {/* Animated Background Glow */}
+      <div className="absolute top-0 left-0 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl -ml-20 -mt-20 transition-all duration-700 group-hover:bg-indigo-400/10 pointer-events-none"></div>
+
+      <div className="relative z-10 flex items-center gap-3 mb-4">
         <Link to={`/user/${post.author?.username}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           {post.author?.profilePic && post.author.profilePic !== "default-avatar.png" ? (
             <img 

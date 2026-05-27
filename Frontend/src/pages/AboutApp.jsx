@@ -4,8 +4,8 @@ import RightSidebar from '../components/RightSidebar/RightSidebar';
 
 function AboutApp() {
   return (
-    <div className="grid grid-cols-3">
-      <div className="col-span-2 py-6 pr-8 pl-4 h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar">
+    <div className="w-full max-w-4xl mx-auto py-6 px-4 h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar">
+      <div className="min-w-0">
         
         {/* HERO SECTION */}
         <div className="bg-gradient-to-br from-[#0b1d35] to-[#050c1a] rounded-3xl p-8 md:p-12 border border-indigo-500/30 mb-10 relative overflow-hidden shadow-2xl shadow-indigo-500/10">
@@ -130,11 +130,6 @@ function AboutApp() {
             </div>
           </div>
         </div>
-
-      </div>
-
-      <div className="col-span-1">
-        <RightSidebar />
       </div>
     </div>
   );
