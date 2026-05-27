@@ -6,26 +6,53 @@
   --font-outfit:"Outfit",sans-serif;
 }
 
-/* Custom Dark Scrollbar */
-::-webkit-scrollbar {
+/* Custom Premium Dark Scrollbar */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: #050c1a; /* Matches app background */
+  border-left: 1px solid rgba(255, 255, 255, 0.02); /* Very subtle separator line */
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: #1e293b; /* Slate-800 - more visible than before */
+  border-radius: 8px;
+  border: 2px solid #050c1a; /* Creates a "padded" look */
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8; /* App's signature Sky-400 color */
+}
+
+/* Specific class for custom containers to hide default */
+.custom-scrollbar::-webkit-scrollbar {
   width: 6px;
-  height: 6px;
 }
-
-::-webkit-scrollbar-track {
-  background: transparent; 
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
 }
-
-::-webkit-scrollbar-thumb {
-  background: #1e2330; 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e293b;
   border-radius: 10px;
+  border: none;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6; 
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
 }
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #1e2330 transparent;
-}
+

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import avatar from '../assets/Designer1.png';
+// import avatar from '../assets/Designer1.png';
 import { ThumbsUp, MessageSquare, Eye, EyeOff, Star, CheckCircle, Bookmark, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
