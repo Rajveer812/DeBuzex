@@ -13,7 +13,7 @@ function MyPost({ username }) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/post/user/${username}/posts`, {
+        const response = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/user/${username}/posts`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         setPostData(response.data);
@@ -29,7 +29,7 @@ function MyPost({ username }) {
   // Handler functions to keep UI reactive
   const handleLike = async (postId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/like`, {}, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/like`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPostData(postData.map(post => post._id === postId ? { ...post, likes: response.data.likes } : post));
@@ -38,7 +38,7 @@ function MyPost({ username }) {
 
   const submitSolution = async (postId, text) => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/post/${postId}/solution`, { text }, {
+      const response = await axios.post(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution`, { text }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPostData(postData.map(post => post._id === postId ? { ...post, solutions: response.data.solutions } : post));
@@ -47,7 +47,7 @@ function MyPost({ username }) {
 
   const handleStar = async (postId, solutionId, rating) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/star`, { rating }, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution/${solutionId}/star`, { rating }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPostData(postData.map(post => post._id === postId ? { ...post, solutions: response.data.solutions } : post));
@@ -56,7 +56,7 @@ function MyPost({ username }) {
 
   const handleAccept = async (postId, solutionId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/accept`, {}, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution/${solutionId}/accept`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPostData(postData.map(post => post._id === postId ? { ...post, solutions: response.data.solutions, isResolved: response.data.isResolved } : post));
@@ -65,7 +65,7 @@ function MyPost({ username }) {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/post/${postId}`, {
+      await axios.delete(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       // Remove the deleted post from the UI instantly

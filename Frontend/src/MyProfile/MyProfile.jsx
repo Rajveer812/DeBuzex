@@ -24,7 +24,7 @@ function MyProfile() {
         }
         
         // Fetch full stats using username
-        const response = await axios.get(`http://localhost:5000/api/users/${user.username}`, {
+        const response = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/users/${user.username}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         

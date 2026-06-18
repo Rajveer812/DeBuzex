@@ -13,7 +13,7 @@ function Notifications() {
     const markAsRead = async () => {
       try {
         const token = localStorage.getItem('token');
-        await axios.put('http://localhost:5000/api/notifications/read', {}, {
+        await axios.put(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/notifications/read`, {}, {
           headers: { Authorization: `Bearer ${token}` }
         });
         

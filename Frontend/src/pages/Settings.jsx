@@ -37,7 +37,7 @@ function Settings() {
 
     try {
       setPasswordLoading(true);
-      await axios.put('http://localhost:5000/api/users/change-password', 
+      await axios.put(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/users/change-password`, 
         { currentPassword, newPassword }, 
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -62,7 +62,7 @@ function Settings() {
 
     try {
       setDeleteLoading(true);
-      await axios.delete('http://localhost:5000/api/users/delete-account', {
+      await axios.delete(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/users/delete-account`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       // Logout and redirect

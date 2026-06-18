@@ -27,7 +27,7 @@ function Explore() {
 
         // Fetch Posts
         setPostsLoading(true);
-        const postsRes = await axios.get('http://localhost:5000/api/post');
+        const postsRes = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/post`);
         // Filter only posts that are NOT resolved
         const openBugs = postsRes.data.filter(post => !post.isResolved);
         setUnsolvedPosts(openBugs);
@@ -35,7 +35,7 @@ function Explore() {
 
         // Fetch Leaderboard
         setLeaderboardLoading(true);
-        const rankRes = await axios.get('http://localhost:5000/api/users/leaderboard', { headers });
+        const rankRes = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/users/leaderboard`, { headers });
         setLeaderboard(rankRes.data);
         setLeaderboardLoading(false);
 
@@ -51,7 +51,7 @@ function Explore() {
   // Shared Handlers for Posts
   const handleLike = async (postId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/like`, {}, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/like`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUnsolvedPosts(unsolvedPosts.map(post => post._id === postId ? { ...post, likes: response.data.likes } : post));
@@ -60,7 +60,7 @@ function Explore() {
 
   const submitSolution = async (postId, text) => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/post/${postId}/solution`, { text }, {
+      const response = await axios.post(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution`, { text }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUnsolvedPosts(unsolvedPosts.map(post => post._id === postId ? { ...post, solutions: response.data.solutions } : post));
@@ -69,7 +69,7 @@ function Explore() {
 
   const handleStar = async (postId, solutionId, rating) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/star`, { rating }, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution/${solutionId}/star`, { rating }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUnsolvedPosts(unsolvedPosts.map(post => post._id === postId ? { ...post, solutions: response.data.solutions } : post));
@@ -78,7 +78,7 @@ function Explore() {
 
   const handleAccept = async (postId, solutionId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/accept`, {}, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution/${solutionId}/accept`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       // Since it is now accepted, it is resolved! Remove it from the unsolved feed!
@@ -92,7 +92,7 @@ function Explore() {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/post/${postId}`, {
+      await axios.delete(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUnsolvedPosts(unsolvedPosts.filter(post => post._id !== postId));

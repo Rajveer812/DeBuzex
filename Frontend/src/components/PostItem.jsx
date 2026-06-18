@@ -30,7 +30,7 @@ export default function PostItem({ post, user, onLike, onSubmitSolution, onStar,
       return;
     }
     try {
-      const response = await axios.put(`http://localhost:5000/api/users/save-post/${post._id}`, {}, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/users/save-post/${post._id}`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       // The API returns the updated savedPosts array

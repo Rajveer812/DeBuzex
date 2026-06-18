@@ -40,7 +40,7 @@ function Chatarea({ selectedChat }) {
 
       try {
         const token = localStorage.getItem('token');
-        const { data } = await axios.get(`http://localhost:5000/api/message/${selectedChat._id}`, {
+        const { data } = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/message/${selectedChat._id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -94,7 +94,7 @@ function Chatarea({ selectedChat }) {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
       // A. Save it to the database
-      const { data } = await axios.post('http://localhost:5000/api/message', {
+      const { data } = await axios.post(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/message`, {
         chatId: selectedChat._id,
         text: newMessage
       }, config);

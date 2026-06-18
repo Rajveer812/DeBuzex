@@ -23,7 +23,7 @@ function Post() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/post?page=1&limit=10");
+        const response = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/post?page=1&limit=10`);
         setPostData(response.data);
         setHasMore(response.data.length === 10);
         setPage(1);
@@ -41,7 +41,7 @@ function Post() {
     try {
       setLoadingMore(true);
       const nextPage = page + 1;
-      const response = await axios.get(`http://localhost:5000/api/post?page=${nextPage}&limit=10`);
+      const response = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post?page=${nextPage}&limit=10`);
       setPostData(prev => [...prev, ...response.data]);
       setPage(nextPage);
       setHasMore(response.data.length === 10);
@@ -54,7 +54,7 @@ function Post() {
 
   const handleLike = async (postId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/like`, {}, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/like`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -76,7 +76,7 @@ function Post() {
   // We modified this to accept the text directly from the PostItem!
   const submitSolution = async (postId, text) => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/post/${postId}/solution`, {
+      const response = await axios.post(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution`, {
         text: text
       }, {
         headers: {
@@ -99,7 +99,7 @@ function Post() {
 
   const handleStar = async (postId, solutionId, rating) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/star`, { rating }, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution/${solutionId}/star`, { rating }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPostData(postData.map(post => {
@@ -113,7 +113,7 @@ function Post() {
 
   const handleAccept = async (postId, solutionId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/post/${postId}/solution/${solutionId}/accept`, {}, {
+      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/post/${postId}/solution/${solutionId}/accept`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPostData(postData.map(post => {
