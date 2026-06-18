@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { chatSchema } = require('../schemas/ChatSchema');
+const { chatSchema } = require('../schemas/chatSchema');
 
 const chatModel = mongoose.model('Chat', chatSchema);
 
