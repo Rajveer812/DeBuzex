@@ -19,7 +19,7 @@ function UserProfile() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('token');
-        const { data } = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/users/${username}`, {
+        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/users/${username}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfileUser(data);
@@ -39,7 +39,7 @@ function UserProfile() {
       setRequestStatus('sending');
       const token = localStorage.getItem('token');
       // Create chat/send request
-      await axios.post(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/chat`, 
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/chat`, 
         { userId: profileUser._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -11,7 +11,7 @@ function Chatlist({ selectedChat, setSelectedChat }) {
   const fetchChats = async () => {
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/chat`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/chat`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setChats(data);
@@ -40,7 +40,7 @@ function Chatlist({ selectedChat, setSelectedChat }) {
     e.stopPropagation(); // Prevent opening the chat while accepting
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/chat/status`, 
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/chat/status`, 
         { chatId, status: 'accepted' },
         { headers: { Authorization: `Bearer ${token}` } }
       );

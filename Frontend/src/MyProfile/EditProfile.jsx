@@ -21,7 +21,7 @@ function EditProfile() {
           return;
         }
 
-        const response = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/users/profile`, {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -68,7 +68,7 @@ function EditProfile() {
         submitData.append('profilePic', profilePicFile);
       }
 
-      const response = await axios.put(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/users/profile`, submitData, {
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/users/profile`, submitData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'

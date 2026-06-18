@@ -20,7 +20,7 @@ export const AuthProvider=({children})=>{
         try {
             const token = localStorage.getItem('token');
             if(!token) return;
-            const res = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/notifications`, {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/notifications`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setNotifications(res.data);
@@ -33,7 +33,7 @@ export const AuthProvider=({children})=>{
         try {
             const token = localStorage.getItem('token');
             if(!token) return;
-            const res = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/message/unread-count`, {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/message/unread-count`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUnreadMessageCount(res.data.unreadCount);

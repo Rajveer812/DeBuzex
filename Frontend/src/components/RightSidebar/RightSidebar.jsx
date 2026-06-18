@@ -13,7 +13,7 @@ function RightSidebar() {
       try {
         const token = localStorage.getItem('token');
         if (!token) return;
-        const res = await axios.get(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/users/leaderboard`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/users/leaderboard`, {
            headers: { Authorization: `Bearer ${token}` }
         });
         setLeaderboard(res.data);

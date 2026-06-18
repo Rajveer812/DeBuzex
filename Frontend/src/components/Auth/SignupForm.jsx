@@ -16,7 +16,7 @@ const SignupForm = () => {
     setError('');
     
     try {
-      const response = await axios.post(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/auth/register`, formData);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/auth/register`, formData);
       login(response.data.user); 
     } catch (err) {
       setError(err.response?.data?.message || "Failed to connect to server.");

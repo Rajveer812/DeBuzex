@@ -16,7 +16,7 @@ const LoginForm = () => {
     setError('');
     
     try {
-      const response = await axios.post(`\${import.meta.env.VITE_BACKEND_URL || '\${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}'}/api/auth/login`, formData);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/auth/login`, formData);
       login(response.data.user); 
     } catch (err) {
       // Axios puts backend errors inside err.response.data
