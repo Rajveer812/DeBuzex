@@ -37,7 +37,7 @@ const server = app.listen(PORT, () => {
 const io = require("socket.io")(server, {
   pingTimeout: 60000, // Closes connection after 60s of inactivity to save bandwidth
   cors: {
-    origin: "http://localhost:5173", // CRITICAL: Ensure this matches your React frontend URL!
+    origin: "*", // Allows both localhost and your production frontend to connect
   },
 });
 
